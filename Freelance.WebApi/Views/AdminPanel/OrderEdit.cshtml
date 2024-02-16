@@ -1,0 +1,163 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = "_LayoutAdmin";
+    var orderId = ViewData["orderAdmId"];
+}
+<div class="card mb-1" id="main-info-card">
+    <div class="card-header bg-secondary d-sm-flex justify-content-between">
+        <h5 class="card-title text-white mt-auto mb-auto">Редактировать заказ</h5>
+    </div>
+    <div class="card-body">
+        <form id="updateOrderForm" method="post">
+            <div class="mb-3">
+                <label for="title" id="title-label" class="form-label">Заголовок:</label>
+                <input type="text" class="form-control" id="title">
+                <div id="title-error" class="text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label for="description" id="description-label" class="form-label">Описание заказа:</label>
+                <textarea class="form-control" id="description" required></textarea>
+                <div id="description-error" class="text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label for="projectFee" id="projectFee-label" class="form-label">Стоимость:</label>
+                <input type="number" class="form-control" id="projectFee">
+                <div id="projectFee-error" class="text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label for="currency" class="form-label">Валюта:</label>
+                <select class="form-control" id="currency">
+                    <option selected disabled>Выберите валюту</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="category" class="form-label">Категория деятельности:</label>
+                <select class="form-control" id="category">
+                    <option selected disabled>Выберите категорию деятельности</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        <button type="button" class="btn btn-outline-success btn-sm" id="save-order-button">Сохранить изменения</button>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+
+    function validateInput(errorsArray) {
+        for (var errorKey in errorsArray) {
+            if (errorsArray.hasOwnProperty(errorKey)) {
+                var error = errorsArray[errorKey];
+                var propertyName = error["PropertyName"].replace(/Id/g, '');
+                var errorMessage = error["ErrorMessage"].replace(/Id/g, '').replace(/0:00:00/g, '');
+                var labelError = document.getElementById(`${propertyName.toLowerCase()}-label`);
+
+                var errorElement = document.getElementById(`${propertyName.toLowerCase()}-error`);
+                if (errorElement) {
+                    //errorElement.innerText = "Поле " + `'${labelError.innerText.replace(':', '')}'` + errorMessage.replace(/'.*?'/g, '');
+                    errorElement.innerText = errorMessage;
+                    console.log(errorMessage.replace(`'${propertyName}'`, ''));
+                }
+            }
+        }
+    }
+
+    function loadAllRefsFromLocal() {
+        var refs = localStorage.getItem('refs');
+        var refsObj = JSON.parse(refs);
+
+        if (refsObj && refsObj.currencies) {
+            var currencySelect = document.getElementById('currency');
+            for (var i = 0; i < refsObj.currencies.length; i++) {
+                var currencyOption = document.createElement("option");
+                currencyOption.value = i + 1;
+                currencyOption.text = refsObj.currencies[i].name;
+                currencySelect.add(currencyOption);
+            }
+        }
+
+        if (refsObj && refsObj.categories) {
+            var categorySelect = document.getElementById('category');
+            for (var j = 0; j < refsObj.categories.length; j++) {
+                var categoryOption = document.createElement("option");
+                categoryOption.value = j + 1;
+                categoryOption.text = refsObj.categories[j].name;
+                categorySelect.add(categoryOption);
+            }
+        }
+    }
+
+    function addOrderDataFromResponse() {
+        var settings = {
+            "url": commonURL + "order/@orderId",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('admin')
+            },
+        };
+        $.ajax(settings).done(function (response) {
+            document.getElementById('title').value = response.title;
+            console.log(response);
+            document.getElementById('description').value = response.title;
+            document.getElementById('projectFee').value = response.description;
+            document.getElementById('projectFee').value = response.projectFee;
+
+            if (response.currency) {
+                var currencySelect = document.getElementById('currency');
+                var selectedCurrency = [...currencySelect.options].find(option => option.value === response.currency.id.toString());
+                if (selectedCurrency) {
+                    selectedCurrency.selected = true;
+                }
+            }
+            if (response.category) {
+                var categorySelect = document.getElementById('category');
+                var selectedCategory = [...categorySelect.options].find(option => option.value === response.category.id.toString());
+                if (selectedCategory) {
+                    selectedCategory.selected = true;
+                }
+            }
+        }).fail(function (xhr, status, error) {
+            if (xhr.status === 400 || xhr.status === 401) {
+
+            }
+        });
+    }
+
+    function updateNewOrder() {
+        document.getElementById('save-order-button').addEventListener('click', function () {
+            var settings = {
+                "url": commonURL + "order",
+                "method": "PUT",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + sessionStorage.getItem('admin')
+                },
+                "data": JSON.stringify({
+                    "title": $("#title").val(),
+                    "description": $("#description").val(),
+                    "projectFee": $("#projectFee").val(),
+                    "currencyId": $("#currency").val(),
+                    "categoryId": $("#category").val(),
+                    "orderId": "@orderId"
+                }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                window.location.href = '/admin/orders';
+            }).fail(function (xhr, status, error) {
+                if (xhr.status === 400 || xhr.status === 401) {
+                    validateInput(xhr.responseJSON);
+                }
+            });
+        });
+    }
+    loadAllRefsFromLocal();
+    addOrderDataFromResponse();
+    updateNewOrder();
+</script>

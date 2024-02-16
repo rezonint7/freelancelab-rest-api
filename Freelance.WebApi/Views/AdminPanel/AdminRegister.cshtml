@@ -1,0 +1,139 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = "_LayoutAdmin";
+}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<div class="registration-container d-flex align-items-center justify-content-center" style="min-height: 100vh;">
+    <div class="card col-md-6" style="min-height: 100vh;">
+        <div class="card-body">
+            <h2 class="card-title text-center">Добавление нового администратора</h2>
+            <form id="registerForm" method="post">
+                <div class="form-group mb-3">
+                    <label for="login">Логин:</label>
+                    <input type="text" class="form-control" id="login">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Пароль:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password">
+                        <div class="input-group-append m-auto ms-3">
+                            <i id="password-show-icon" class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="password">Повторите пароль:</label>
+                    <div class="input-group">
+                        <input type="password" class="form-control" id="password-repeat">
+                        <div class="input-group-append m-auto ms-3">
+                            <i id="password-show-icon-repeat" class="fas fa-eye"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="lastName">Фамилия:</label>
+                    <input type="text" class="form-control" id="lastName">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="firstName">Имя:</label>
+                    <input type="text" class="form-control" id="firstName">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="middleName">Отчество:</label>
+                    <input type="text" class="form-control" id="middleName">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="gender">Пол:</label>
+                    <select class="form-control" id="gender">
+                        <option value="нет">Не выбрано</option>
+                        <option value="муж">Мужской</option>
+                        <option value="жен">Женский</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="email">Email:</label>
+                    <input type="email" class="form-control" id="email">
+                </div>
+                <div class="form-group mb-3">
+                    <label for="phone" id="phone-label">Номер телефона:</label>
+                    <input type="tel" class="form-control" id="phone">
+                    <div id="phone-error" class="text-danger"></div>
+                </div>
+                <div class="text-center mt-3">
+                    <button type="submit" class="btn btn-primary">Добавить администратора</button>
+                    <button type="button" class="btn btn-secondary">Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    const passwordShowIcon = document.getElementById('password-show-icon');
+    const passwordShowIconRepeat = document.getElementById('password-show-icon-repeat');
+    let password = document.getElementById('password');
+    let passwordRepeat = document.getElementById('password-repeat');
+
+    function togglePasswordVisibility() {
+        if (password.type === "password") {
+            password.type = "text";
+            passwordRepeat.type = "text"
+            passwordShowIcon.classList.add("fa-eye-slash");
+            passwordShowIcon.classList.remove("fa-eye");
+            passwordShowIconRepeat.classList.add("fa-eye-slash");
+            passwordShowIconRepeat.classList.remove("fa-eye");
+        }
+        else {
+            password.type = "password";
+            passwordRepeat.type = "password"
+            passwordShowIcon.classList.add("fa-eye");
+            passwordShowIcon.classList.remove("fa-eye-slash");
+            passwordShowIconRepeat.classList.add("fa-eye");
+            passwordShowIconRepeat.classList.remove("fa-eye-slash");
+        }
+    }
+    passwordShowIcon.addEventListener('click', togglePasswordVisibility);
+    passwordShowIconRepeat.addEventListener('click', togglePasswordVisibility);
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script>
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+    jQuery(document).ready(function ($) {
+        $('#phone').inputmask('+7(999)999-9999', {
+            clearIncomplete: true,
+            clearMaskOnLostFocus: false
+        });
+    });
+    $(document).ready(function () {
+        $("#registerForm").submit(function (event) {
+            event.preventDefault();
+            var settings = {
+                "url": commonURL + "auth/register",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json"
+                },
+                "data": JSON.stringify({
+                    "login": $("#login").val(),
+                    "password": $("#password").val(),
+                    "roleId": 3,
+                    "firstName": $("#firstName").val(),
+                    "lastName": $("#lastName").val(),
+                    "middleName": $("#middleName").val(),
+                    "gender": $("#gender").val(),
+                    "email": $("#email").val(),
+                    "phone": $("#phone").val()
+                }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                console.log(response);
+                window.location.href = "/admin/admins";
+            });
+        });
+    });
+</script>

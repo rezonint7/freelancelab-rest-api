@@ -1,0 +1,91 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    ViewData["Title"] = "Главная";
+}
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<div class="container">
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <div class="input-group">
+                <input type="text" class="form-control" id="search-field" placeholder="Поиск заказов...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="search-button"type="button">Поиск</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-1" id="count-orders"></div>
+    <div class="row mt-3" id="orders-container"></div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+
+    function updateOrders(search, category) {
+        var userData = localStorage.getItem('userData');
+        var category = -1;
+        if(userData != null) {
+            category = userData.category !== undefined ? userData.category.id : -1;
+        }
+        
+
+        var settings = {
+            "url": commonURL + "order?search=" + search + "&categoryId=" + category,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer " + localStorage.getItem('user')
+            },
+        };
+
+        $.ajax(settings).done(function (data) {
+            $('#orders-container').empty();
+            $.each(data.orders, function (index, order) {
+                var card = `
+                    <div class="col-md-12 mt-1">
+                        <div class="card">
+                            <div class="d-flex justify-content-center">
+                                <div class="card-body">
+                                    <h5 class="card-title">${order.title}</h5>
+                                    <p class="card-text">Опубликовано в: ${new Date(order.createdAt).toLocaleString()}</p>
+                                    <a href="#" class="card-link" data-order-id="${order.orderId}">Подробнее</a>
+                                </div>
+                                <div class="bg-white m-4">
+                                    <h5 class="project-fee"><i class="fas fa-money-bill-alt mr-2"></i>${order.projectFee} рублей</h5>
+                                    <p class="project-fee">за заказ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                if (!order.isCompleted) {
+                    if (order.implementerId === "00000000-0000-0000-0000-000000000000") {
+                        $('#orders-container').append(card);
+                    }
+                }
+            });
+        });
+    }
+    $("#search-field").empty();
+    updateOrders($("#search-field").val().trim());
+
+    document.getElementById('search-button').addEventListener('click', function () {
+        updateOrders($("#search-field").val().trim());
+    });
+
+    $(document).ready(function () {
+        $(document).on('click', '.card-link', function () {
+            var orderId = $(this).data('order-id');
+            window.location.href = '/order/details/' + orderId;
+        });
+    });
+
+    // Обновляем список заказов при необходимости (например, по нажатию кнопки)
+    $('#refresh-button').click(function () {
+        updateOrders("");
+    });
+</script>

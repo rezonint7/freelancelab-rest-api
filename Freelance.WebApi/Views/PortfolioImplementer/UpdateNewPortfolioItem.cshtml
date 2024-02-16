@@ -1,0 +1,102 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = null;
+    var portfolioId = ViewData["portfolioId"];
+}
+<div class="card mb-1" id="main-info-card">
+    <div class="card-header bg-secondary d-sm-flex justify-content-between">
+        <h5 class="card-title text-white mt-auto mb-auto">Изменить проект в портфолио</h5>
+    </div>
+    <div class="card-body">
+        <form id="newOrderForm" method="post">
+            <div class="mb-3">
+                <label for="title" id="title-label" class="form-label">Название проекта:</label>
+                <input type="text" class="form-control" id="title">
+                <div id="title-error" class="text-danger"></div>
+            </div>
+            <div class="mb-3">
+                <label for="description" id="description-label" class="form-label">Описание проекта:</label>
+                <textarea class="form-control" id="description" required></textarea>
+                <div id="description-error" class="text-danger"></div>
+            </div>
+        </form>
+    </div>
+    <div class="card-footer text-muted">
+        <button type="button" class="btn btn-outline-success btn-sm" id="save-button">Сохранить изменения</button>
+    </div>
+</div>
+
+<script>
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+
+    function validateInput(errorsArray) {
+        for (var errorKey in errorsArray) {
+            if (errorsArray.hasOwnProperty(errorKey)) {
+                var error = errorsArray[errorKey];
+                var propertyName = error["PropertyName"].replace(/Id/g, '');
+                var errorMessage = error["ErrorMessage"].replace(/Id/g, '').replace(/0:00:00/g, '');
+                var labelError = document.getElementById(`${propertyName.toLowerCase()}-label`);
+
+                var errorElement = document.getElementById(`${propertyName.toLowerCase()}-error`);
+                if (errorElement) {
+                    //errorElement.innerText = "Поле " + `'${labelError.innerText.replace(':', '')}'` + errorMessage.replace(/'.*?'/g, '');
+                    errorElement.innerText = errorMessage;
+                    console.log(errorMessage.replace(`'${propertyName}'`, ''));
+                }
+            }
+        }
+    }
+
+    function loadDataFromRequest() {
+        var settings = {
+            "url": commonURL + "profile/implemeter/portfolio/details/@portfolioId",
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Authorization": "Bearer " + localStorage.getItem('user')
+            },
+        };
+
+        $.ajax(settings).done(function (response) {
+            document.getElementById('title').value = response.title;
+            document.getElementById('description').value = response.description;
+        }).fail(function (xhr, status, error) {
+            if (xhr.status === 404) {
+                window.location.href = '/';
+            }
+        });
+    }
+
+    function publishNewOrder() {
+        document.getElementById('save-button').addEventListener('click', function () {
+            var settings = {
+                "url": commonURL + "profile/implementer/portfolio/edit",
+                "method": "PUT",
+                "timeout": 0,
+                "headers": {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem('user')
+                },
+                "data": JSON.stringify({
+                    "portfolioItemId": @portfolioId,
+                    "title": $("#title").val(),
+                    "description": $("#description").val()
+                }),
+            };
+
+            $.ajax(settings).done(function (response) {
+                window.location.href = '/profile';
+            }).fail(function (xhr, status, error) {
+                if (xhr.status === 400 || xhr.status === 401) {
+                    validateInput(xhr.responseJSON);
+                }
+                if (xhr.status === 404) {
+                    window.location.href = '/';
+                }
+            });
+        });
+    }
+    loadDataFromRequest();
+    publishNewOrder();
+</script>

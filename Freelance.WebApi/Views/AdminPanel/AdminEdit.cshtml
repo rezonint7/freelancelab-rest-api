@@ -1,0 +1,160 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = "_LayoutAdmin";
+    var adminId = ViewData["adminId"];
+}
+
+<div class="container-profile-edit" id="profile-edit">
+    <div class="card mb-1" id="main-info-card">
+        <h5 class="card-header bg-secondary d-sm-inline-flex justify-content-between">
+            <strong class="text-white mt-auto mb-auto">Основная информация</strong>
+            <button type="button" class="btn btn-outline-light btn-sm" id="save-profile-button">Сохранить</button>
+        </h5>
+
+        <div class="card-body">
+            <form id="editForm" method="post">
+                <div class="form-group">
+                    <label for="lastname" id="lastname-label">Фамилия:</label>
+                    <input type="text" class="form-control" id="lastName">
+                    <div id="lastname-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="firstname" id="firstname-label">Имя:</label>
+                    <input type="text" class="form-control" id="firstName">
+                    <div id="firstname-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="middlename" id="middlename-label">Отчество:</label>
+                    <input type="text" class="form-control" id="middleName">
+                    <div id="middlename-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="birthday" id="birthday-label">Дата рождения:</label>
+                    <input type="date" class="form-control" id="birthDay">
+                    <div id="birthday-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="gender" id="gender-label">Пол:</label>
+                    <select class="form-control" id="gender">
+                        <option value="нет">Не выбрано</option>
+                        <option value="муж">Мужской</option>
+                        <option value="жен">Женский</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="phone" id="phone-label">Номер телефона:</label>
+                    <input type="tel" class="form-control" id="phone">
+                    <div id="phone-error" class="text-danger"></div>
+                </div>
+                <div class="form-group">
+                    <label for="email" id="email-label">Email:</label>
+                    <input type="email" class="form-control" id="email">
+                    <div id="email-error" class="text-danger"></div>
+                </div><br />
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+<script>
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+
+    function addUserDataFromLocal(userData) {
+        document.getElementById('firstName').value = userData.firstName;
+        document.getElementById('lastName').value = userData.lastName;
+        document.getElementById('middleName').value = userData.middleName;
+        document.getElementById('birthDay').value = userData.birthday ? userData.birthday.slice(0, 10) : '2000-01-01';
+        document.getElementById('phone').value = userData.phone;
+        document.getElementById('email').value = userData.email;
+    }
+
+    function validateInput(errorsArray) {
+        for (var errorKey in errorsArray) {
+            if (errorsArray.hasOwnProperty(errorKey)) {
+                var error = errorsArray[errorKey];
+                var propertyName = error["PropertyName"].replace(/Id/g, '');
+                var errorMessage = error["ErrorMessage"].replace(/Id/g, '').replace(/0:00:00/g, '');
+                var labelError = document.getElementById(`${propertyName.toLowerCase()}-label`);
+
+                var errorElement = document.getElementById(`${propertyName.toLowerCase()}-error`);
+                if (errorElement) {
+                    //errorElement.innerText = "Поле " + `'${labelError.innerText.replace(':', '')}'` + errorMessage.replace(/'.*?'/g, '');
+                    errorElement.innerText = errorMessage;
+                    console.log(errorMessage.replace(`'${propertyName}'`, ''));
+                }
+            }
+        }
+    }
+
+    function clearErrorMessages() {
+        document.getElementById('lastName').addEventListener('input', function () {
+            document.getElementById('lastname-error').textContent = '';
+        });
+        document.getElementById('firstName').addEventListener('input', function () {
+            document.getElementById('firstname-error').textContent = '';
+        });
+        document.getElementById('middleName').addEventListener('input', function () {
+            document.getElementById('middlename-error').textContent = '';
+        });
+        document.getElementById('phone').addEventListener('input', function () {
+            document.getElementById('phone-error').textContent = '';
+        });
+        document.getElementById('email').addEventListener('input', function () {
+            document.getElementById('email-error').textContent = '';
+        });
+    }
+    jQuery(document).ready(function ($) {
+        $('#phone').inputmask('+7(999)999-9999', {
+            clearIncomplete: true,
+            clearMaskOnLostFocus: false
+        });
+    });
+
+    var settings = {
+        "url": commonURL + "admin/details/@adminId",
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + sessionStorage.getItem('admin')
+        }
+    };
+    $.ajax(settings).done(function (response) {
+        addUserDataFromLocal(response);
+    });
+    
+    document.getElementById('save-profile-button').addEventListener('click', function () {
+        var settings = {
+            "url": commonURL + "admin/edit",
+            "method": "PUT",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + sessionStorage.getItem('admin')
+            },
+            "data": JSON.stringify({
+                "adminId": "@adminId",
+                "firstName": $("#firstName").val(),
+                "lastName": $("#lastName").val(),
+                "middleName": $("#middleName").val(),
+                "specialization": $("#specialization").val(),
+                "gender": $("#gender").val(),
+                "email": $("#email").val(),
+                "phone": $("#phone").val(),
+                "birthday": $("#birthDay").val(),
+            }),
+        };
+
+        $.ajax(settings).done(function (response) {
+            window.location.href = '/admin/admins';
+        }).fail(function (xhr, status, error) {
+            if (xhr.status === 400 || xhr.status === 401) {
+                validateInput(xhr.responseJSON);
+            }
+        });
+    });
+    clearErrorMessages();
+</script>

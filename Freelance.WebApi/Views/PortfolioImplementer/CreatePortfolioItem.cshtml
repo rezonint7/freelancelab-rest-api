@@ -1,0 +1,27 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+}
+<div class="container" id="container-create-order"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    const viewUrl = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("views").Value);
+    var token = localStorage.getItem('user');
+    var settings = {
+        "url": viewUrl + "view/profile/portfolio/create",
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Authorization": "Bearer " + token
+        }
+    };
+
+    $.ajax(settings).done(function (response) {
+        $('#container-create-order').append(response);
+    }).fail(function (xhr, status, error) {
+        if (xhr.status === 403 || xhr.status === 401) {
+            window.location.href = "/";
+        }
+    });
+</script>

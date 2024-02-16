@@ -1,0 +1,104 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@{
+    Layout = "_LayoutAdmin";
+}
+<div class="modal fade" id="staticDelete" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Удалить заказ</h5>
+                <button type="button" class="btn-close button-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить заказ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary button-close" data-bs-dismiss="modal">Назад</button>
+                <button type="button" class="btn btn-danger" id="button-delete-order">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<h5 class="mt-3 orders-title"><strong>Заказы</strong></h5>
+<div class="row mt-3" id="orders-container"></div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function deleteDialog(orderId) {
+        $('#staticDelete').modal('show'); // Открыть диалоговое окно при нажатии на кнопку "Удалить"
+
+        // Обработчик нажатия на кнопку "Удалить" в модальном окне
+        $('#button-delete-order').on('click', function () {
+            var settings = {
+                "url": commonURL + "order/" + orderId,
+                "method": "DELETE",
+                "timeout": 0,
+                "headers": {
+                    "Authorization": "Bearer " + token
+                },
+            };
+
+            $.ajax(settings).done(function (response) {
+                $('#staticDelete').modal('hide');
+                location.reload();
+            });
+        });
+        $('.button-close').on('click', function () {
+            $('#staticDelete').modal('hide'); // Закрыть диалоговое окно
+        });
+    }
+
+    const commonURL = @Json.Serialize(@Configuration.GetSection("ApiURL").GetSection("common").Value);
+    var settings = {
+        "url": commonURL + "order?search=" + "" + "&categoryId=" + -1,
+        "method": "GET",
+        "timeout": 0,
+        "headers": {
+            "Authorization": "Bearer " + sessionStorage.getItem('user')
+        },
+    };
+
+    $.ajax(settings).done(function (data) {
+        $('#orders-container').empty();
+        $('.orders-title').append(" (" + data.orders.length + ")");
+        $.each(data.orders, function (index, order) {
+            var card = `
+                                 <div class="col-md-12 mt-1">
+         <div class="card">
+             <div class="d-flex justify-content-center">
+                 <div class="card-body">
+                     <h5 class="card-title">${order.title}</h5>
+                     <p class="card-text">Опубликовано в: ${new Date(order.createdAt).toLocaleString()}</p>
+                     <a href="#" class="card-link" data-order-id="${order.orderId}">Подробнее</a>
+                 </div>
+                 <div class="bg-white m-4">
+                     <h5 class="project-fee"><i class="fas fa-money-bill-alt mr-2"></i>${order.projectFee} ${order.currency.code}</h5>
+                     <p class="project-fee">за заказ</p>
+                 </div>
+             </div>
+             <div class="card-footer text-muted" id="admin-block">
+              <button type="button" class="btn btn-outline-success" id="edit-order">Редактировать</button>
+              <button type="button" class="btn btn-outline-danger" onclick="deleteDialog('${order.orderId}')" id="delete-order">Удалить</button>
+             </div>
+         </div>
+     </div>
+                    `;
+
+            $('#orders-container').append(card);
+        });
+    });
+
+    $(document).ready(function () {
+        $(document).on('click', '#edit-order', function () {
+            var orderId = $('.card-link').data('order-id');
+            window.location.href = '/admin/order/edit/' + orderId;
+        });
+        $(document).on('click', '.card-link', function () {
+            var orderId = $(this).data('order-id');
+            window.location.href = '/admin/order/' + orderId;
+        });
+    });
+</script>
