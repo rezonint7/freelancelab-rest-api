@@ -23,7 +23,7 @@ namespace Freelance.Domain {
         public virtual Currency Currency { get; set; }
         public virtual Customer Customer { get; set; }
         public virtual Category Category { get; set; }
-        public virtual OrderStatus Status { get; set; }
+        public virtual Status Status { get; set; }
         public virtual Implementer? Implementer { get; set; }
         public ICollection<ResponseImplementer> Responses { get; set; } = new HashSet<ResponseImplementer>();
     }

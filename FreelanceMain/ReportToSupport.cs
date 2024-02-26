@@ -11,8 +11,9 @@ namespace Freelance.Domain {
         public string ReportMessage { get; set; }
         public DateTime CreatedAt { get; set; }
         public int ReasonId { get; set; }
-        public bool Status { get; set; }
+        public string StatusId { get; set; }
 
+        public virtual Status Status { get; set; }
         public virtual ApplicationUser User { get; set; }
         public virtual ReasonToReport Reason { get; set; }
     }

@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Freelance.Persistence.EntityTypeConfigurations {
-    internal class OrderStatusConfiguration : IEntityTypeConfiguration<OrderStatus> {
-        public void Configure(EntityTypeBuilder<OrderStatus> builder) {
+    internal class StatusConfiguration : IEntityTypeConfiguration<Status> {
+        public void Configure(EntityTypeBuilder<Status> builder) {
             builder.HasKey(currency => currency.Id);
             builder.HasIndex(currency => currency.Id).IsUnique();
             builder.Property(currency => currency.Name).HasMaxLength(200);

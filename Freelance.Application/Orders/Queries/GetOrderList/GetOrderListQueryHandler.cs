@@ -48,10 +48,10 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                     new Domain.Currency { Name = "Рубли", Code = "RUB"}    
                 );
                 await _freelanceDBContext.OrderStatuses.AddRangeAsync(
-                   new Domain.OrderStatus { Id = "archived", Name = "В архиве" },
-                   new Domain.OrderStatus { Id = "completed", Name = "Завершен" },
-                   new Domain.OrderStatus { Id = "open", Name = "Открыт" },
-                   new Domain.OrderStatus { Id = "canceled", Name = "Отменен" }
+                   new Domain.Status { Id = "archived", Name = "В архиве" },
+                   new Domain.Status { Id = "completed", Name = "Завершен" },
+                   new Domain.Status { Id = "open", Name = "Открыт" },
+                   new Domain.Status { Id = "canceled", Name = "Отменен" }
                );
                 await _freelanceDBContext.Categories.AddRangeAsync(
                     new Domain.Category { Name = "Разработка" },

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Freelance.Domain {
-    public class OrderStatus {
+    public class Status {
         public string Id { get; set; }
         public string Name { get; set; }
     }

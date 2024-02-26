@@ -12,6 +12,7 @@ namespace Freelance.Domain {
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public string Content { get; set; }
+        public bool IsRead { get; set; }
 
         public virtual Chat Chat { get; set; }
         public virtual ApplicationUser User { get; set; }

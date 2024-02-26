@@ -13,6 +13,9 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasKey(chat => chat.Id);
             builder.HasIndex(chat => chat.Id).IsUnique();
             builder.Property(chat => chat.Content).HasMaxLength(5000).IsRequired();
+            builder.Property(chat => chat.CreatedAt).IsRequired();
+            builder.Property(chat => chat.UpdatedAt);
+            builder.Property(chat => chat.IsRead);
 
             builder.HasOne(chat => chat.Chat)
               .WithMany()

@@ -14,7 +14,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasIndex(report => report.Id).IsUnique();
             builder.Property(report => report.ReportMessage).HasMaxLength(1000).IsRequired();
             builder.Property(report => report.CreatedAt).IsRequired();
-            builder.Property(report => report.Status);
 
             builder.HasOne(report => report.User)
               .WithMany()
@@ -23,6 +22,10 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasOne(report => report.Reason)
               .WithMany()
               .HasForeignKey(report => report.ReasonId);
+
+            builder.HasOne(report => report.Status)
+              .WithMany()
+              .HasForeignKey(report => report.StatusId);
         }
     }
 }
