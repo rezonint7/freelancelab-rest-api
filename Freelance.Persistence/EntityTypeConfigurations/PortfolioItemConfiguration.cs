@@ -20,10 +20,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasOne(portfolio => portfolio.Category)
              .WithMany()
              .HasForeignKey(portfolio => portfolio.CategoryId);
-
-            builder.HasOne(portfolio => portfolio.Implementer)
-             .WithMany()
-             .HasForeignKey(portfolio => portfolio.ImplementerId);
         }
     }
 }

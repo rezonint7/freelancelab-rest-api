@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freelance.WebApi.Controllers {
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class PortfolioImplementerController : Controller {
         [HttpGet("view/profile/portfolio/create")]
         [Authorize(Roles = "Implementer")]

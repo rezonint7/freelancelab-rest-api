@@ -2,16 +2,12 @@
 using Freelance.Application.Auth.Commands.RegisterNewUser;
 using Freelance.Application.Auth.Queries.AuthenticateUser;
 using Freelance.Application.Interfaces;
-using Freelance.Domain;
 using Freelance.WebApi.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System.Security.Claims;
 
 namespace Freelance.WebApi.Controllers.API
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     public class AuthController : BaseController
     {
         private readonly IMapper _mapper;

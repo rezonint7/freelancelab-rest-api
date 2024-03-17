@@ -21,7 +21,7 @@ namespace Freelance.Application.ResponsesCustomerOrders.Commands.CompleteOrder {
             if (order == null || order.CustomerId != request.CustomerId) {
                 throw new NotFoundException(nameof(Order), request.OrderId);
             }
-            var status = await _freelanceDBContext.OrderStatuses.FirstOrDefaultAsync(status => status.Name == "completed");
+            var status = await _freelanceDBContext.Statuses.FirstOrDefaultAsync(status => status.Name == "completed");
             order.Status = status;
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;

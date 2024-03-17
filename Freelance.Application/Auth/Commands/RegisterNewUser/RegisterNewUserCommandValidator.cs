@@ -25,9 +25,6 @@ namespace Freelance.Application.Auth.Commands.RegisterNewUser {
                 .Matches("^[a-zA-Zа-яА-Я]*$");
             RuleFor(newUser => newUser.Email).NotEmpty().MaximumLength(200).EmailAddress()
                 .WithName("Email адрес");
-            RuleFor(newUser => newUser.Phone).MaximumLength(30)
-                .WithName("Номер телефона")
-                .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$");
         }
     }
 }

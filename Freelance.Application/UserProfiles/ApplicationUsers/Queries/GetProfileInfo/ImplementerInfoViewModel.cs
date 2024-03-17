@@ -29,7 +29,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public WorkExperience WorkExperience { get; set; }
 
         public IList<PortfolioImplementerLookupDto> Portfolio { get; set; }
-        public IList<OrderResponseLookupDto> Responses { get; set; }
+        public IList<OrderLookupDto> Orders { get; set; }
         public IList<FeedbackUserLookupDto> Feedbacks { get; set; }
 
         public void Mapping(Profile profile) {
@@ -66,8 +66,8 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     opt => opt.MapFrom(implementer => implementer.WorkExperience))
                 .ForMember(implementerViewModel => implementerViewModel.Portfolio,
                     opt => opt.MapFrom(implementer => implementer.Portfolio))
-                .ForMember(implementerViewModel => implementerViewModel.Responses,
-                    opt => opt.MapFrom(implementer => implementer.Responses))
+                .ForMember(implementerViewModel => implementerViewModel.Orders,
+                    opt => opt.MapFrom(implementer => implementer.Orders))
                 .ForMember(implementerViewModel => implementerViewModel.Feedbacks,
                     opt => opt.MapFrom(implementer => implementer.User.Feedbacks));
         }

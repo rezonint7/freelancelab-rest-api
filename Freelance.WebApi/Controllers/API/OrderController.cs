@@ -17,25 +17,29 @@ using Freelance.Application.ResponsesCustomerOrders.Commands.CompleteOrder;
 
 namespace Freelance.WebApi.Controllers.API
 {
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     public class OrderController : BaseController
     {
         private readonly IMapper _mapper;
         public OrderController(IMapper mapper) => _mapper = mapper;
 
         [HttpGet]
-        public async Task<ActionResult<OrderListViewModel>> GetAllOrders(string? search = "", int categoryId = -1)
+        public async Task<ActionResult<OrderListViewModel>> GetAllOrders(string? search = "", string categories = "-1", string additionalCategories = "null", int pageSize = 20, int page = 1)
         {
             var query = new GetOrderListQuery {
                 Search = search,
-                Category = categoryId
+                Categories = categories,
+                AdditionalCategories = additionalCategories,
+                Page = page,
+                PageSize = pageSize
             };
+
             var viewModel = await Mediator.Send(query);
 
             return Ok(viewModel);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("details/{id}")]
         public async Task<ActionResult<OrderDetailsViewModel>> GetDetailsOrder(Guid id)
         {
             var query = new GetOrderDetailsQuery
@@ -47,7 +51,7 @@ namespace Freelance.WebApi.Controllers.API
             return Ok(viewModel);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         [Authorize(Roles = "Customer")]
         public async Task<ActionResult<Guid>> CreateNewOrder([FromBody] CreateOrderDto createOrderDto)
         {
@@ -59,7 +63,7 @@ namespace Freelance.WebApi.Controllers.API
             return Created($"{orderId}", orderId);
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         [Authorize(Roles = "Customer, Admin, Owner")]
         public async Task<ActionResult<Unit>> UpdateOrder([FromBody] UpdateOrderDto updateOrderDto)
         {
@@ -71,7 +75,7 @@ namespace Freelance.WebApi.Controllers.API
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Customer, Admin, Owner")]
         public async Task<ActionResult<Unit>> DeleteOrder(Guid id)
         {
@@ -99,7 +103,7 @@ namespace Freelance.WebApi.Controllers.API
             return Created($"Order: {id} - Implementer: {UserId}", true);
         }
 
-        [HttpDelete("{id}/delete_response")]
+        [HttpDelete("{id}/delete-response")]
         [Authorize(Roles = "Implementer")]
         public async Task<ActionResult<Unit>> DeleteResponseOrder(Guid id)
         {

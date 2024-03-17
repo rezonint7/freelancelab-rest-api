@@ -15,14 +15,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.Property(response => response.ResponseMessage).HasMaxLength(2000).IsRequired();
             builder.Property(response => response.CreatedAt).IsRequired();
             builder.Property(response => response.UpdatedAt);
-
-            builder.HasOne(response => response.Order)
-              .WithMany()
-              .HasForeignKey(response => response.OrderId);
-
-            builder.HasOne(response => response.Implementer)
-              .WithMany()
-              .HasForeignKey(response => response.ImplementerId);
         }
     }
 }

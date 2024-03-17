@@ -20,7 +20,7 @@ namespace Freelance.Application.Orders.Commands.CreateOrder {
             var customer = await _freelanceDBContext.Customers.FindAsync(request.CustomerId, cancellationToken);
             var currency = await _freelanceDBContext.Currencies.FindAsync(request.CurrencyId, cancellationToken);
             var category = await _freelanceDBContext.Categories.FindAsync(request.CategoryId, cancellationToken);
-            var status = await _freelanceDBContext.OrderStatuses.FirstOrDefaultAsync(status => status.Id == "open");
+            var status = await _freelanceDBContext.Statuses.FirstOrDefaultAsync(status => status.Id == "open");
 
             var order = new Order {
                 OrderId = Guid.NewGuid(),

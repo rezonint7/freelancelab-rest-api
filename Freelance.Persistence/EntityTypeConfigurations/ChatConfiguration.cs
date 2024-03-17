@@ -13,10 +13,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasKey(chat => chat.Id);
             builder.HasIndex(chat => chat.Id).IsUnique();
             builder.Property(chat => chat.Name).HasMaxLength(300).IsRequired();
-
-            builder.HasOne(chat => chat.Admin)
-              .WithMany()
-              .HasForeignKey(chat => chat.AdminId);
         }
     }
 }

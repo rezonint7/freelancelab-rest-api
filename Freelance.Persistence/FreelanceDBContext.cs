@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity;
 namespace Freelance.Persistence {
     public class FreelanceDBContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>, IFreelanceDBContext {
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Status> OrderStatuses { get; set; }
+        public DbSet<Status> Statuses { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Category> Categories { get; set; }

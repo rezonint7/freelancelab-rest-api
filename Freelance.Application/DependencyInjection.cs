@@ -4,6 +4,7 @@ using Freelance.Application.Common.Behaviors;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 
 namespace Freelance.Application {
     public static class DependencyInjection {
@@ -27,10 +28,6 @@ namespace Freelance.Application {
                 }
             }
 
-
-            //services.AddValidatorsFromAssembly(Assembly.GetAssembly(typeof(DependencyInjection)));
-            //services.AddValidatorsFromAssemblies(new[] {Assembly.GetExecutingAssembly()});
-            //services.AddValidatorsFromAssemblyContaining<CreateNewOrderCommandValidator>();
             return services;
         }
     }

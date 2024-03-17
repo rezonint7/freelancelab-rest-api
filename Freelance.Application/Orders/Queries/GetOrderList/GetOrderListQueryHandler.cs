@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Freelance.Application.Interfaces;
 using Freelance.Domain;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,40 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
     internal class GetOrderListQueryHandler : IRequestHandler<GetOrderListQuery, OrderListViewModel> {
         private readonly IFreelanceDBContext _freelanceDBContext;
         private readonly IMapper _mapper;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-        public GetOrderListQueryHandler(
-            IFreelanceDBContext freelanceDBContext,
-            IMapper mapper)
-            => (_freelanceDBContext, _mapper) = (freelanceDBContext, mapper);
+        public GetOrderListQueryHandler(IFreelanceDBContext freelanceDBContext, IMapper mapper, RoleManager<IdentityRole<Guid>> roleManager)
+        {
+            _freelanceDBContext = freelanceDBContext;
+            _mapper = mapper;
+            _roleManager = roleManager;
+        }
 
         public async Task<OrderListViewModel> Handle(GetOrderListQuery request, CancellationToken cancellationToken) {
             IQueryable<Order> ordersQuery = _freelanceDBContext.Orders;
             if (!string.IsNullOrEmpty(request.Search)) {
                 ordersQuery = ordersQuery.Where(order => order.Title.ToLower().Contains(request.Search.ToLower()));
             }
-            if(request.Category != -1) {
-                ordersQuery = ordersQuery.Where(order => order.CategoryId == request.Category);
+            if (!string.IsNullOrEmpty(request.Categories) && request.Categories != "-1") {
+                var categoriesSplit = request.Categories.Split(',').Select(int.Parse).ToList();
+                ordersQuery = ordersQuery.Where(order => categoriesSplit.Contains(order.CategoryId));
+            }
+            if (!string.IsNullOrEmpty(request.AdditionalCategories) && request.AdditionalCategories != "null") {
+                var additionalCategoriesSplit = request.AdditionalCategories.Split(',').ToList();
+                foreach(var category in additionalCategoriesSplit) {
+                    switch(category.ToLower()) {
+                        case "with_cost":
+                            ordersQuery = ordersQuery.Where(order => order.ProjectFee > 0);
+                            break;
+                        case "with_reviews":
+                            ordersQuery = ordersQuery.Where(order => order.Customer.User.Feedbacks.Any());
+                            break;
+                        case "only_urgent":
+                            ordersQuery = ordersQuery.Where(order => order.IsUrgent == true);
+                            break;
+                        default: break;
+                    }
+                }
             }
 
             int totalItems = await ordersQuery.CountAsync(cancellationToken);
@@ -42,12 +64,21 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
 
             if (_freelanceDBContext.Currencies.Count() == 0 && 
                 _freelanceDBContext.Categories.Count() == 0 &&
-                _freelanceDBContext.WorkExperience.Count() == 0) {
+                _freelanceDBContext.WorkExperience.Count() == 0 &&
+                _roleManager.Roles.Count() == 0) {
+
+                var roles = new string[] { "Customer", "Implementer", "Admin", "Owner", "Manager" };
+                foreach (var role in roles) {
+                    var roleExist = await _roleManager.RoleExistsAsync(role);
+                    if (!roleExist) {
+                        await _roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                    }
+                }
 
                 await _freelanceDBContext.Currencies.AddRangeAsync(
                     new Domain.Currency { Name = "Рубли", Code = "RUB"}    
                 );
-                await _freelanceDBContext.OrderStatuses.AddRangeAsync(
+                await _freelanceDBContext.Statuses.AddRangeAsync(
                    new Domain.Status { Id = "archived", Name = "В архиве" },
                    new Domain.Status { Id = "completed", Name = "Завершен" },
                    new Domain.Status { Id = "open", Name = "Открыт" },
@@ -67,6 +98,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                 );
                 await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             }
+
             return new OrderListViewModel {
                 Orders = orders,
                 TotalItems = totalItems,

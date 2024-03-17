@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freelance.WebApi.Controllers.API {
-    [Route("api/[controller]")]
+    [Route("api/admin")]
     public class AdminController: BaseController {
         private readonly IMapper _mapper;
 
@@ -66,7 +66,7 @@ namespace Freelance.WebApi.Controllers.API {
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Admin, Owner")]
         public async Task<ActionResult<Unit>> DeleteAdmin(Guid id) {
             if (!IsCurrentUserOwnerOrAdmin(id, "Owner")) return Forbid();

@@ -13,7 +13,7 @@ namespace Freelance.Application.Interfaces {
         DbSet<UserWarning> UserWarnings { get; set; }
 
         DbSet<Order> Orders { get; set; }
-        DbSet<Status> OrderStatuses { get; set; }
+        DbSet<Status> Statuses { get; set; }
         DbSet<Currency> Currencies { get; set; }
         DbSet<Category> Categories { get; set; }
         DbSet<PortfolioItem> PortfolioItems { get; set; }

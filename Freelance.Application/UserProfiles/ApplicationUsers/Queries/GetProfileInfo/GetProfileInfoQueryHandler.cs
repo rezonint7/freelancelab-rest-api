@@ -10,7 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo {
+namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo
+{
     internal class GetProfileInfoQueryHandler : IRequestHandler<GetProfileInfoQuery, object> {
         private readonly IFreelanceDBContext _freelanceDBContext;
         private readonly IUserService _userService;
@@ -29,12 +30,20 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
             if(userRole == null) { throw new NotFoundException(nameof(ApplicationUser), request.UserId); }
 
             if(userRole.Contains("CUSTOMER")) {
-                var customer = await _freelanceDBContext.Customers.FirstOrDefaultAsync(customer => customer.UserId == request.UserId, cancellationToken);
+                var customer = await _freelanceDBContext.Customers
+                    .Include(i => i.Orders)
+                    .ThenInclude(i => i.Currency)
+                    .Include(i => i.User.Feedbacks)
+                    .FirstOrDefaultAsync(customer => customer.UserId == request.UserId, cancellationToken);
                 if(customer == null) { throw new NotFoundException(nameof(Customer), request.UserId); }
                 return _mapper.Map<CustomerInfoViewModel>(customer);
             }
             else if(userRole.Contains("IMPLEMENTER")) {
-                var impl = await _freelanceDBContext.Implementers.FirstOrDefaultAsync(impl => impl.UserId == request.UserId, cancellationToken);
+                var impl = await _freelanceDBContext.Implementers
+                    .Include(i => i.Orders)
+                    .Include(i => i.Portfolio)
+                    .Include(i => i.User.Feedbacks)
+                    .FirstOrDefaultAsync(impl => impl.UserId == request.UserId, cancellationToken);
                 if (impl == null) { throw new NotFoundException(nameof(Implementer), request.UserId); }
                 return _mapper.Map<ImplementerInfoViewModel>(impl);
             }

@@ -3,7 +3,7 @@ using Freelance.Application.References.Queries.GetAllReferences;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freelance.WebApi.Controllers.API {
-    [Route("api/[controller]")]
+    [Route("api/references")]
     public class ReferencesController: BaseController {
         private readonly IMapper _mapper;
         public ReferencesController(IMapper mapper) => _mapper = mapper;

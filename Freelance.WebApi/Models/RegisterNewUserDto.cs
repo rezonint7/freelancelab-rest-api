@@ -12,7 +12,6 @@ namespace Freelance.WebApi.Models {
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
         public string Email { get; set; }
-        public string Phone { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<RegisterNewUserDto, RegisterNewUserCommand>()
@@ -29,9 +28,7 @@ namespace Freelance.WebApi.Models {
                 .ForMember(userCommand => userCommand.MiddleName,
                     opt => opt.MapFrom(userCommand => userCommand.MiddleName))
                 .ForMember(userCommand => userCommand.Email,
-                    opt => opt.MapFrom(userCommand => userCommand.Email))
-                .ForMember(userCommand => userCommand.Phone,
-                    opt => opt.MapFrom(userCommand => userCommand.Phone));
+                    opt => opt.MapFrom(userCommand => userCommand.Email));
         }
     }
 }

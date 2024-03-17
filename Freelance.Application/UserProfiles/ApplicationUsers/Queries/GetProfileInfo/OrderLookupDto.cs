@@ -20,8 +20,6 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public Currency? Currency { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public Guid ImplementerId { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Order, OrderLookupDto>()
@@ -39,8 +37,6 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     opt => opt.MapFrom(order => order.IsUrgent))
                 .ForMember(order => order.Currency,
                     opt => opt.MapFrom(order => order.Currency))
-                .ForMember(order => order.ImplementerId,
-                    opt => opt.MapFrom(order => order.ImplementerId))
                 .ForMember(order => order.CreatedAt,
                     opt => opt.MapFrom(order => order.CreatedAt));
         }

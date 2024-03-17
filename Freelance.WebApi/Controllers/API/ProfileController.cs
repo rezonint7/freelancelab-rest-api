@@ -6,7 +6,6 @@ using Freelance.Application.PortfolioItemsImplementer.Queries.GetDetailsPortfoli
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.DeleteUserProfile;
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUserProfile;
 using Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo;
-using Freelance.Domain;
 using Freelance.WebApi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -36,7 +35,7 @@ namespace Freelance.WebApi.Controllers.API {
             return NoContent();
         }
 
-        [HttpDelete("/delete/{id}")]
+        [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Implementer, Admin, Owner")]
         public async Task<ActionResult<Unit>> DeleteUserProfile(Guid id) {
 

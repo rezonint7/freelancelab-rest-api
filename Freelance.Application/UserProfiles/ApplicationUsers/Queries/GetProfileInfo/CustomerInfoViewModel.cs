@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo
 {
-    public class CustomerInfoViewModel : IMapWith<Customer> {
+    public class CustomerInfoViewModel : IMapWith<Customer>
+    {
         public Guid UserId { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
@@ -24,7 +25,8 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public IList<OrderLookupDto> Orders { get; set; }
         public IList<FeedbackUserLookupDto> Feedbacks { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<Customer, CustomerInfoViewModel>()
                 .ForMember(customerViewModel => customerViewModel.UserId,
                     opt => opt.MapFrom(customer => customer.UserId))

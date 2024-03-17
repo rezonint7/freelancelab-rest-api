@@ -16,14 +16,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.Property(chat => chat.CreatedAt).IsRequired();
             builder.Property(chat => chat.UpdatedAt);
             builder.Property(chat => chat.IsRead);
-
-            builder.HasOne(chat => chat.Chat)
-              .WithMany()
-              .HasForeignKey(chat => chat.ChatId);
-
-            builder.HasOne(chat => chat.User)
-              .WithMany()
-              .HasForeignKey(chat => chat.UserId);
         }
     }
 }

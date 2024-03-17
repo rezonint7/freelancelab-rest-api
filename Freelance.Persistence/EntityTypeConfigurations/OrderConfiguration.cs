@@ -32,10 +32,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
               .WithMany()
               .HasForeignKey(order => order.CurrencyId);
 
-            builder.HasOne(order => order.Customer)
-             .WithMany()
-             .HasForeignKey(order => order.CustomerId);
-
             builder.HasOne(order => order.Implementer)
             .WithMany()
             .HasForeignKey(order => order.ImplementerId)

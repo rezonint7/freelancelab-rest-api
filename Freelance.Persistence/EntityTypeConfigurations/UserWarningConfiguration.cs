@@ -15,10 +15,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.Property(response => response.MessageWarning).HasMaxLength(1000).IsRequired();
             builder.Property(response => response.CreatedAt).IsRequired();
 
-            builder.HasOne(report => report.User)
-             .WithMany()
-             .HasForeignKey(report => report.UserId);
-
             builder.HasOne(report => report.ReasonWarning)
               .WithMany()
               .HasForeignKey(report => report.ReasonWarningId);

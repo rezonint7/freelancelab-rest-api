@@ -16,10 +16,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.Property(feedback => feedback.FeedbackRating).IsRequired();
             builder.Property(feedback => feedback.CreatedAt).IsRequired();
             builder.Property(feedback => feedback.UpdatedAt);
-
-            builder.HasOne(feedback => feedback.User)
-              .WithMany()
-              .HasForeignKey(feedback => feedback.UserId);
         }
     }
 }

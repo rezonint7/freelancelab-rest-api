@@ -20,5 +20,6 @@ namespace Freelance.Domain {
 
         public ICollection<PortfolioItem> Portfolio { get; set; } = new HashSet<PortfolioItem>();
         public ICollection<ResponseImplementer> Responses { get; set; } = new HashSet<ResponseImplementer>();
+        public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 }

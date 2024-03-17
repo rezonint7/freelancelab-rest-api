@@ -54,7 +54,6 @@ namespace Freelance.Persistence.Services {
             var newUser = new ApplicationUser {
                 UserName = registerNewUserCommand.Login,
                 Email = registerNewUserCommand.Email,
-                PhoneNumber = registerNewUserCommand.Phone,
                 FirstName = registerNewUserCommand.FirstName,
                 LastName = registerNewUserCommand.LastName,
                 MiddleName = registerNewUserCommand.MiddleName,

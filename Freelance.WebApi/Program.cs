@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using Serilog;
 using FluentValidation;
 using System.Globalization;
+using Freelance.WebApi.Hubs;
 
 string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "logs");
 string logFilePath = Path.Combine(logsDirectory, "logs-.txt");
@@ -29,6 +30,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddControllers();
 builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(config => {
     config.AddProfile(new AssemblyMappingProfile(typeof(Program).Assembly));
     config.AddProfile(new AssemblyMappingProfile(typeof(IFreelanceDBContext).Assembly));
@@ -108,6 +110,8 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.MapHub<ChatHub>("/chathub");
 
 app.MapControllerRoute(
     name: "default",
