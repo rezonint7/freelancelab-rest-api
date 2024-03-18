@@ -9,7 +9,7 @@ namespace Freelance.Application.Forum.Commands.DeleteQuestionForum {
     internal class DeleteQuestionForumCommandValidator : AbstractValidator<DeleteQuestionForumCommand> {
         public DeleteQuestionForumCommandValidator() {
             RuleFor(newQuestion => newQuestion.UserId).NotEqual(Guid.Empty);
-            RuleFor(newQuestion => newQuestion.QuestionId).GreaterThan(0);
+            RuleFor(newQuestion => newQuestion.QuestionId).NotEmpty().InclusiveBetween(0, int.MaxValue);
         }
     }
 }
