@@ -29,7 +29,7 @@ namespace Freelance.Application.Forum.Commands.CreateNewQuestionForum {
                 Tags = request.Tags,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Likes = 0,
+                LikesBy = "",
                 User = user
             };
 

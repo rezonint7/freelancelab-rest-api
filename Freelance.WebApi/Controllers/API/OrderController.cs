@@ -2,7 +2,6 @@
 using Freelance.Application.Orders.Queries.GetOrderList;
 using Freelance.Application.Orders.Queries.GetOrderDetails;
 using System.Threading.Tasks;
-using Freelance.WebApi.Models;
 using AutoMapper;
 using Freelance.Application.Orders.Commands.CreateOrder;
 using Freelance.Application.Orders.Commands.UpdateOrder;
@@ -14,6 +13,7 @@ using Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerToOrd
 using Freelance.Application.ResponsesCustomerOrders.Commands.DeleteImplementerFromOrder;
 using MediatR;
 using Freelance.Application.ResponsesCustomerOrders.Commands.CompleteOrder;
+using Freelance.WebApi.Models.Orders;
 
 namespace Freelance.WebApi.Controllers.API
 {
@@ -42,10 +42,7 @@ namespace Freelance.WebApi.Controllers.API
         [HttpGet("details/{id}")]
         public async Task<ActionResult<OrderDetailsViewModel>> GetDetailsOrder(Guid id)
         {
-            var query = new GetOrderDetailsQuery
-            {
-                OrderId = id
-            };
+            var query = new GetOrderDetailsQuery{ OrderId = id };
             var viewModel = await Mediator.Send(query);
 
             return Ok(viewModel);

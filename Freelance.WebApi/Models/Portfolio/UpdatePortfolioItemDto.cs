@@ -3,15 +3,18 @@ using Freelance.Application.Common.Mapping;
 using Freelance.Application.PortfolioItemsImplementer.Commands.CreateNewPortfolioItem;
 using Freelance.Application.PortfolioItemsImplementer.Commands.UpdatePortfolioItem;
 
-namespace Freelance.WebApi.Models {
-    public class UpdatePortfolioItemDto: IMapWith<UpdatePortfolioItemCommand> {
+namespace Freelance.WebApi.Models.Portfolio
+{
+    public class UpdatePortfolioItemDto : IMapWith<UpdatePortfolioItemCommand>
+    {
         public int PortfolioItemId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string PhotoPath { get; set; }
         public string CategoryId { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<UpdatePortfolioItemDto, UpdatePortfolioItemCommand>()
                  .ForMember(portfolioUpdateCommand => portfolioUpdateCommand.PortfolioItemId,
                     opt => opt.MapFrom(orderDto => orderDto.PortfolioItemId))

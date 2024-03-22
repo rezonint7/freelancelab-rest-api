@@ -16,7 +16,7 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.Property(question => question.Content).HasMaxLength(5000).IsRequired();
             builder.Property(question => question.CreatedAt).IsRequired();
             builder.Property(question => question.UpdatedAt);
-            builder.Property(question => question.Likes);
+            builder.Property(question => question.LikesBy);
 
             builder.HasOne(question => question.User)
               .WithMany()

@@ -2,7 +2,7 @@
 using Freelance.Application.Auth.Commands.RegisterNewUser;
 using Freelance.Application.Auth.Queries.AuthenticateUser;
 using Freelance.Application.Interfaces;
-using Freelance.WebApi.Models;
+using Freelance.WebApi.Models.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freelance.WebApi.Controllers.API

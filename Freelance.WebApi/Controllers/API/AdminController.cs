@@ -5,12 +5,14 @@ using Freelance.Application.Admin.Queries.GelAllAdmins;
 using Freelance.Application.Admin.Queries.GetAllUsers;
 using Freelance.Application.Admin.Queries.GetDetailsAdmin;
 using Freelance.Application.Auth.Commands.RegisterNewUser;
-using Freelance.WebApi.Models;
+using Freelance.WebApi.Models.Admin;
+using Freelance.WebApi.Models.Auth;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Freelance.WebApi.Controllers.API {
+namespace Freelance.WebApi.Controllers.API
+{
     [Route("api/admin")]
     public class AdminController: BaseController {
         private readonly IMapper _mapper;

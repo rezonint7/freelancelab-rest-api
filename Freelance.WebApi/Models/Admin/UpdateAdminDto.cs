@@ -2,8 +2,10 @@
 using Freelance.Application.Admin.Commands.UpdateAdmin;
 using Freelance.Application.Common.Mapping;
 
-namespace Freelance.WebApi.Models {
-    public class UpdateAdminDto: IMapWith<UpdateAdminCommand> {
+namespace Freelance.WebApi.Models.Admin
+{
+    public class UpdateAdminDto : IMapWith<UpdateAdminCommand>
+    {
         public Guid AdminId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -13,7 +15,8 @@ namespace Freelance.WebApi.Models {
         public string Email { get; set; }
         public string? Phone { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<UpdateAdminDto, UpdateAdminCommand>()
                 .ForMember(adminUpdate => adminUpdate.AdminId,
                     opt => opt.MapFrom(adminUpdate => adminUpdate.AdminId))

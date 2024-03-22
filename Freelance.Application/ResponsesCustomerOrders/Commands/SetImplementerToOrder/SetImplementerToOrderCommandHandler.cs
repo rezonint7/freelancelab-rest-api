@@ -3,17 +3,14 @@ using Freelance.Application.Interfaces;
 using Freelance.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerToOrder {
     internal class SetImplementerToOrderCommandHandler : IRequestHandler<SetImplementerToOrderCommand, Unit> {
         private readonly IFreelanceDBContext _freelanceDBContext;
-        public SetImplementerToOrderCommandHandler(IFreelanceDBContext freelanceDBContext) {
+        private readonly IChatService _chatService;
+        public SetImplementerToOrderCommandHandler(IFreelanceDBContext freelanceDBContext, IChatService chatService) {
             _freelanceDBContext = freelanceDBContext;
+            _chatService = chatService;
         }
 
         public async Task<Unit> Handle(SetImplementerToOrderCommand request, CancellationToken cancellationToken) {
@@ -27,6 +24,7 @@ namespace Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerT
             }
 
             order.ImplementerId = request.ImplementerId;
+            await _chatService.CreateNewChatAsync(request.ImplementerId, order.CustomerId, order.OrderId, cancellationToken);
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

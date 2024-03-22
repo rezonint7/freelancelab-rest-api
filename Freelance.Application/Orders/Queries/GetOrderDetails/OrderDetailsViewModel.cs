@@ -12,7 +12,6 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails
 {
     public class OrderDetailsViewModel : IMapWith<Order>
     {
-        public Guid OrderId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Tags { get; set; }
@@ -29,8 +28,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails
 
         public IList<ResponseLookupDto> Responses { get; set; }
 
-        public void Mapping(Profile profile)
-        {
+        public void Mapping(Profile profile) {
             profile.CreateMap<Order, OrderDetailsViewModel>()
                 .ForMember(orderViewModel => orderViewModel.Title,
                     opt => opt.MapFrom(order => order.Title))

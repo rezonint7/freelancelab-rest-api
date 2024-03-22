@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Freelance.Application.Forum.Commands.CreateNewAnswerToComment {
-    internal class CreateNewAnswerToCommentCommand: IRequest<int> {
+    public class CreateNewAnswerToCommentCommand: IRequest<int> {
         public Guid UserId { get; set; }
         public int CommentToQuestionForumId { get; set; }
         public string AnswerMessage { get; set; }

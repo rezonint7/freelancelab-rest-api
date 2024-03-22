@@ -6,12 +6,14 @@ using Freelance.Application.PortfolioItemsImplementer.Queries.GetDetailsPortfoli
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.DeleteUserProfile;
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUserProfile;
 using Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo;
-using Freelance.WebApi.Models;
+using Freelance.WebApi.Models.Portfolio;
+using Freelance.WebApi.Models.Profiles;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Freelance.WebApi.Controllers.API {
+namespace Freelance.WebApi.Controllers.API
+{
 
     [Route("api/profile")]
     public class ProfileController : BaseController {

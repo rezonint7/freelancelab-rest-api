@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Freelance.Application.Forum.Commands.UpdateCommentToQuestion {
-    internal class UpdateCommentToQuestionCommand: IRequest<Unit> {
+    public class UpdateCommentToQuestionCommand: IRequest<Unit> {
         public Guid UserId { get; set; }
         public int CommentId { get; set; }
 

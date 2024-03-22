@@ -1,0 +1,42 @@
+﻿using Freelance.Application.Common.Exceptions;
+using Freelance.Application.Interfaces;
+using Freelance.Domain;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Freelance.Application.Forum.Commands.LikeToQuestion {
+    internal class LikeToQuestionCommandHandler : IRequestHandler<LikeToQuestionCommand, Unit> {
+        private readonly IFreelanceDBContext _freelanceDBContext;
+        private readonly IUserService _userService;
+
+        public LikeToQuestionCommandHandler(IFreelanceDBContext freelanceDBContext, IUserService userService){
+            _freelanceDBContext = freelanceDBContext;
+            _userService = userService;
+        }
+
+        public async Task<Unit> Handle(LikeToQuestionCommand request, CancellationToken cancellationToken) {
+            var user = await _userService.GetUserByIdAsync(request.UserId, cancellationToken);
+            var question = await _freelanceDBContext.QuestionsForum.FirstOrDefaultAsync(question => question.Id == request.QuestionId, cancellationToken);
+            if (question == null) { throw new NotFoundException(nameof(QuestionForum), request.QuestionId); }
+            if (user == null) { throw new NotFoundException(nameof(ApplicationUser), request.UserId); }
+
+            var likes = question.LikesBy.Split(';').ToList();
+            if (likes.Contains(user.Id.ToString())) {
+                likes.Remove(user.Id.ToString());
+            }
+            else {
+                likes.Add(user.Id.ToString());
+            }
+
+            question.LikesBy = string.Join(";", likes);
+
+            await _freelanceDBContext.SaveChangesAsync(cancellationToken);
+            return Unit.Value;
+        }
+    }
+}

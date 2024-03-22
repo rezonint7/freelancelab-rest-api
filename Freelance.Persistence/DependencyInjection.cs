@@ -49,7 +49,10 @@ namespace Freelance.Persistence {
             .AddDefaultTokenProviders();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<UserService>();
+
             services.AddScoped<IJwtService, JwtService>();
+            services.AddScoped<IChatService, ChatService>();
 
             services.AddScoped<IFreelanceDBContext>(provider => provider.GetService<FreelanceDBContext>());
 

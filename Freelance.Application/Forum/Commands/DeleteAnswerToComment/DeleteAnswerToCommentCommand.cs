@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Freelance.Application.Forum.Commands.DeleteAnswerToComment {
-    internal class DeleteAnswerToCommentCommand: IRequest<Unit> {
+    public class DeleteAnswerToCommentCommand: IRequest<Unit> {
         public Guid UserId { get; set; }
         public int AnswerId { get; set; }
     }

@@ -2,8 +2,10 @@
 using Freelance.Application.Auth.Commands.RegisterNewUser;
 using AutoMapper;
 
-namespace Freelance.WebApi.Models {
-    public class RegisterNewUserDto: IMapWith<RegisterNewUserCommand> {
+namespace Freelance.WebApi.Models.Auth
+{
+    public class RegisterNewUserDto : IMapWith<RegisterNewUserCommand>
+    {
         public string Login { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }
@@ -13,7 +15,8 @@ namespace Freelance.WebApi.Models {
         public string? MiddleName { get; set; }
         public string Email { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<RegisterNewUserDto, RegisterNewUserCommand>()
                 .ForMember(userCommand => userCommand.Login,
                     opt => opt.MapFrom(userCommand => userCommand.Login))

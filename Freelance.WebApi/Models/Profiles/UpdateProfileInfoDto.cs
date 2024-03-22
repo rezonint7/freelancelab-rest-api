@@ -3,8 +3,10 @@ using Freelance.Application.Common.Mapping;
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUserProfile;
 using Freelance.Domain;
 
-namespace Freelance.WebApi.Models {
-    public class UpdateProfileInfoDto: IMapWith<UpdateUserProfileCommand> {
+namespace Freelance.WebApi.Models.Profiles
+{
+    public class UpdateProfileInfoDto : IMapWith<UpdateUserProfileCommand>
+    {
         public Guid UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -15,7 +17,8 @@ namespace Freelance.WebApi.Models {
         public string AvatarProfilePath { get; set; }
         public string HeaderProfilePath { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<UpdateProfileInfoDto, UpdateUserProfileCommand>()
                 .ForMember(implementerUpdateCommand => implementerUpdateCommand.UserId,
                     opt => opt.MapFrom(implementerDto => implementerDto.UserId))

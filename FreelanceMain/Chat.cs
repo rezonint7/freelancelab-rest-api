@@ -9,8 +9,8 @@ namespace Freelance.Domain {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public Guid AdminId { get; set; }
-        public virtual ApplicationUser Admin { get; set; }
 
+        public ICollection<ApplicationUser> Users { get; set; }
         public ICollection<ChatMessage> ChatMessages { get; set; }
 
     }

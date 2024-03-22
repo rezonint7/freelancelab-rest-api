@@ -2,12 +2,15 @@
 using Freelance.Application.Common.Mapping;
 using Freelance.Application.ResponsesCustomerOrders.Commands.DeleteImplementerFromOrder;
 
-namespace Freelance.WebApi.Models {
-    public class DeleteImplementerFromOrderDto: IMapWith<DeleteImplementerFromOrderCommand> {
+namespace Freelance.WebApi.Models.Orders
+{
+    public class DeleteImplementerFromOrderDto : IMapWith<DeleteImplementerFromOrderCommand>
+    {
         public Guid ImplementerId { get; set; }
         public Guid OrderId { get; set; }
 
-        public void Mapping(Profile profile) {
+        public void Mapping(Profile profile)
+        {
             profile.CreateMap<DeleteImplementerFromOrderDto, DeleteImplementerFromOrderCommand>()
                 .ForMember(setImpl => setImpl.ImplementerId,
                     opt => opt.MapFrom(setImpl => setImpl.ImplementerId))

@@ -19,10 +19,6 @@ namespace Freelance.Persistence.EntityTypeConfigurations {
             builder.HasOne(comment => comment.User)
               .WithMany()
               .HasForeignKey(comment => comment.UserId);
-
-            builder.HasOne(comment => comment.CommentToQuestionForum)
-              .WithMany()
-              .HasForeignKey(comment => comment.CommentToQuestionForumId);
         }
     }
 }
