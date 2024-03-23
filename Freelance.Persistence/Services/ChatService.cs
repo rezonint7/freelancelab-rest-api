@@ -30,10 +30,8 @@ namespace Freelance.Persistence.Services {
             var chat = new Chat {
                 Name = order.Title,
                 AdminId = customerId,
-                Users = new List<ApplicationUser>()
+                Users = new List<ApplicationUser> { customer, implementer }
             };
-            chat.Users.Add(customer);
-            chat.Users.Add(implementer);
             await _freelanceDBContext.Chats.AddAsync(chat);
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
 

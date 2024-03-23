@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.Chats.Queries.GetChatHistory {
-    public class GetChatHistoryQuery: IRequest<ChatHistoryViewModel> {
+namespace Freelance.Application.Chats.Queries.GetChatList {
+    public class GetChatListQuery: IRequest<ChatListViewModel> {
         public Guid UserId { get; set; }
-        public Guid ChatId { get; set; }
     }
 }

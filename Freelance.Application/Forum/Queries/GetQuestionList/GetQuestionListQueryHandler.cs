@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Freelance.Application.Interfaces;
-using Freelance.Application.Orders.Queries.GetOrderList;
 using Freelance.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
