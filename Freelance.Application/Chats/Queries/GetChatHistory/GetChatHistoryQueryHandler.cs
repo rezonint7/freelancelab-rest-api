@@ -35,13 +35,13 @@ namespace Freelance.Application.Chats.Queries.GetChatHistory {
             if (!chat.Users.Contains(user)) { throw new NotFoundException(nameof(Chat), request.ChatId); }
 
 
-            var messages = await ((chat.ChatMessages).AsQueryable())
+            var messages = ((chat.ChatMessages).AsQueryable())
                 .ProjectTo<ChatMessageLookupDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
-            var users = await ((chat.Users).AsQueryable())
+            var users = ((chat.Users).AsQueryable())
                 .ProjectTo<ChatUserLookupDto>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
+                .ToList();
 
             return new ChatHistoryViewModel {
                 ChatName = chat.Name,
