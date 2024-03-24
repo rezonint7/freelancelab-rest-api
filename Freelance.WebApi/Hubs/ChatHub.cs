@@ -3,10 +3,13 @@ using Freelance.Domain;
 using Freelance.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Freelance.WebApi.Hubs {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [EnableCors("AllowAll")]
+    [Authorize(Roles = "Implementer, Customer, MANAGER, ADMIN, OWNER")]
     public class ChatHub : Hub {
         private readonly FreelanceDBContext _freelanceDBContext;
         private readonly IMapper _mapper;
@@ -17,7 +20,7 @@ namespace Freelance.WebApi.Hubs {
         }
 
         public async Task SendMessage(string chatId, string messageContent) {
-            var user = await _freelanceDBContext.Users.FindAsync(Context.UserIdentifier);
+            var user = await _freelanceDBContext.Users.FirstOrDefaultAsync(user => user.Id == Guid.Parse(Context.UserIdentifier));
             var chat = await _freelanceDBContext.Chats.FindAsync(Guid.Parse(chatId));
 
             if (user != null && chat != null) {
@@ -48,15 +51,19 @@ namespace Freelance.WebApi.Hubs {
         }
 
         public override async Task OnConnectedAsync() {
-            var user = await _freelanceDBContext.Users.FindAsync(Context.UserIdentifier);
-            if (user != null) {
-                var chats = user.Chats.Select(c => c.Id.ToString());
-                foreach (var chatId in chats) {
-                    await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
+            await base.OnConnectedAsync();
+            var userId = Context.UserIdentifier;
+
+            if (!string.IsNullOrEmpty(userId)) {
+                var user = await _freelanceDBContext.Users.FindAsync(Guid.Parse(userId));
+                if (user != null) {
+                    var chats = user.Chats.Select(c => c.Id.ToString());
+                    foreach (var chatId in chats) {
+                        await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
+                    }
                 }
             }
-
-            await base.OnConnectedAsync();
+            await Clients.Client(Context.ConnectionId).SendAsync("ReceiveConnectionId", Context.ConnectionId);
         }
     }
 }

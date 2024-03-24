@@ -7,6 +7,6 @@ using System.Xml.Linq;
 
 namespace Freelance.Application.Common.Exceptions {
     public class UserAlreadyExistsException: Exception {
-        public UserAlreadyExistsException(string login, object key): base($"User: {login} key: {key} already exists") {}
+        public UserAlreadyExistsException(string login): base($"User: {login} already exists") {}
     }
 }

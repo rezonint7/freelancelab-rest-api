@@ -37,9 +37,10 @@ builder.Services.AddAutoMapper(config => {
 });
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowAll", policy => {
-        policy.AllowAnyHeader();
-        policy.AllowAnyMethod();
-        policy.AllowAnyOrigin();
+        policy.WithOrigins("http://127.0.0.1:5500")
+            .AllowCredentials()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 builder.Services.AddAuthorization();
@@ -103,15 +104,15 @@ using(var scope = app.Services.CreateScope()) {
 app.UseCustomExceptionHandler();
 app.UseRouting();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowAll");
 app.MapControllers();
-app.UseStaticFiles();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapHub<ChatHub>("/chathub");
+app.MapHub<ChatHub>("/chathub").RequireCors("AllowAll");
 
 app.MapControllerRoute(
     name: "default",
