@@ -5,10 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.ResponsesImplOrders.Commands.CreateResponseImplementer {
-    public class CreateNewResponseCommand : IRequest<Unit> {
+namespace Freelance.Application.Orders.Commands.SetImplementerToOrder
+{
+    public class SetImplementerToOrderCommand : IRequest<Unit>
+    {
+        public Guid CustomerId { get; set; }
         public Guid ImplementerId { get; set; }
         public Guid OrderId { get; set; }
-        public string ResponseMessage { get; set; }
     }
 }

@@ -4,22 +4,28 @@ using Freelance.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerToOrder {
-    internal class SetImplementerToOrderCommandHandler : IRequestHandler<SetImplementerToOrderCommand, Unit> {
+namespace Freelance.Application.Orders.Commands.SetImplementerToOrder
+{
+    internal class SetImplementerToOrderCommandHandler : IRequestHandler<SetImplementerToOrderCommand, Unit>
+    {
         private readonly IFreelanceDBContext _freelanceDBContext;
         private readonly IChatService _chatService;
-        public SetImplementerToOrderCommandHandler(IFreelanceDBContext freelanceDBContext, IChatService chatService) {
+        public SetImplementerToOrderCommandHandler(IFreelanceDBContext freelanceDBContext, IChatService chatService)
+        {
             _freelanceDBContext = freelanceDBContext;
             _chatService = chatService;
         }
 
-        public async Task<Unit> Handle(SetImplementerToOrderCommand request, CancellationToken cancellationToken) {
-            var order = await _freelanceDBContext.Orders.FirstOrDefaultAsync(order => order.OrderId ==  request.OrderId, cancellationToken);
-            var implementer = await _freelanceDBContext.Implementers.FirstOrDefaultAsync(impl => impl.UserId ==  request.ImplementerId, cancellationToken);
-            if(order == null || order.CustomerId != request.CustomerId) {
+        public async Task<Unit> Handle(SetImplementerToOrderCommand request, CancellationToken cancellationToken)
+        {
+            var order = await _freelanceDBContext.Orders.FirstOrDefaultAsync(order => order.OrderId == request.OrderId, cancellationToken);
+            var implementer = await _freelanceDBContext.Implementers.FirstOrDefaultAsync(impl => impl.UserId == request.ImplementerId, cancellationToken);
+            if (order == null || order.CustomerId != request.CustomerId)
+            {
                 throw new NotFoundException(nameof(Order), request.OrderId);
             }
-            if (implementer == null) {
+            if (implementer == null)
+            {
                 throw new NotFoundException(nameof(Implementer), request.ImplementerId);
             }
 

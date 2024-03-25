@@ -5,9 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.ResponsesCustomerOrders.Commands.DeleteImplementerFromOrder {
-    internal class DeleteImplementerFromOrderCommandValidator : AbstractValidator<DeleteImplementerFromOrderCommand>{
-        public DeleteImplementerFromOrderCommandValidator() {
+namespace Freelance.Application.Orders.Commands.SetImplementerToOrder
+{
+    internal class SetImplementerToOrderValidator : AbstractValidator<SetImplementerToOrderCommand>
+    {
+        public SetImplementerToOrderValidator()
+        {
             RuleFor(createNewResponse => createNewResponse.OrderId).NotEqual(Guid.Empty);
             RuleFor(createNewResponse => createNewResponse.ImplementerId).NotEqual(Guid.Empty);
         }

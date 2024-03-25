@@ -9,18 +9,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.ResponsesImplOrders.Commands.DeleteResponseImplementer {
-    internal class DeleteResponseCommandHandler : IRequestHandler<DeleteResponseCommand, Unit> {
+namespace Freelance.Application.Orders.Commands.DeleteResponseImplementer
+{
+    internal class DeleteResponseCommandHandler : IRequestHandler<DeleteResponseCommand, Unit>
+    {
         private readonly IFreelanceDBContext _freelanceDBContext;
 
-        public DeleteResponseCommandHandler(IFreelanceDBContext freelanceDBContext) {
+        public DeleteResponseCommandHandler(IFreelanceDBContext freelanceDBContext)
+        {
             _freelanceDBContext = freelanceDBContext;
         }
 
-        public async Task<Unit> Handle(DeleteResponseCommand request, CancellationToken cancellationToken) {
+        public async Task<Unit> Handle(DeleteResponseCommand request, CancellationToken cancellationToken)
+        {
             var response = _freelanceDBContext.ResponsesImplementer.FirstOrDefault(response => response.Id == request.ResponseId);
-            if(response == null) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
-            if(response.Implementer.UserId != request.ImplementerId) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
+            if (response == null) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
+            if (response.Implementer.UserId != request.ImplementerId) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
             response.Order.Responses.Remove(response);
             _freelanceDBContext.ResponsesImplementer.Remove(response);
 

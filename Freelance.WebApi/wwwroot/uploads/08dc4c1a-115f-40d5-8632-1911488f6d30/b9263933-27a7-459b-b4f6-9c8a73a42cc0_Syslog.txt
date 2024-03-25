@@ -1,0 +1,165 @@
+
+####################################################################
+# 			       TL-WR841N  System Log 
+# Time = 2024-01-31 21:21:13 61929s
+# H-Ver = WR841N v8 00000000 : S-Ver = 3.13.27 Build 121101 Rel.38183n 
+# L = 172.16.0.1 : M = 255.255.255.0
+# W1 = DHCP : W = 100.126.13.71 : M = 255.255.0.0 : G = 100.126.0.1
+####################################################################
+
+Jan 31 19:14:41	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:14:42	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:14:42	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:14:42	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:14:42	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:19:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:19:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:19:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:19:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:19:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:23:01	 DHCP      	INFO   	DHCPS:Recv DISCOVER from 10:63:C8:BE:6C:5F
+Jan 31 19:23:02	 DHCP      	INFO   	DHCPS:Send OFFER with ip 172.16.0.105
+Jan 31 19:23:02	 DHCP      	INFO   	DHCPS:Recv REQUEST from 10:63:C8:BE:6C:5F
+Jan 31 19:23:02	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.105
+Jan 31 19:24:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:24:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:24:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:24:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:24:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:24:46	 DHCP      	INFO   	DHCPS:Recv REQUEST from 70:3A:51:3C:B3:28
+Jan 31 19:24:46	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.100
+Jan 31 19:29:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:29:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:29:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:29:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:29:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:34:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:34:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:34:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:34:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:34:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:39:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:39:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:39:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:39:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:39:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:41:20	 DHCP      	INFO   	DHCPS:Recv REQUEST from 2E:E3:33:CB:07:DC
+Jan 31 19:41:20	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.101
+Jan 31 19:44:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:44:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:44:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:44:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:44:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:45:05	 DHCP      	INFO   	DHCPS:Recv REQUEST from 54:0D:F9:CE:5D:5F
+Jan 31 19:45:05	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.103
+Jan 31 19:49:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:49:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:49:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:49:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:49:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:54:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:54:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:54:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:54:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:54:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 19:59:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 19:59:43	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 19:59:43	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 19:59:43	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 19:59:43	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:04:42	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:04:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:04:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:04:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:04:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:06:21	 DHCP      	INFO   	DHCPS:Recv REQUEST from 04:D9:F5:7D:74:CA
+Jan 31 20:06:21	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.104
+Jan 31 20:06:31	 DHCP      	INFO   	DHCPS:Recv REQUEST from 7C:6D:A6:07:A5:2A
+Jan 31 20:06:31	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.102
+Jan 31 20:09:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:09:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:09:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:09:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:09:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:14:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:14:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:14:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:14:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:14:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:19:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:19:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:19:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:19:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:19:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:23:02	 DHCP      	INFO   	DHCPS:Recv REQUEST from 10:63:C8:BE:6C:5F
+Jan 31 20:23:02	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.105
+Jan 31 20:24:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:24:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:24:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:24:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:24:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:24:47	 DHCP      	INFO   	DHCPS:Recv REQUEST from 70:3A:51:3C:B3:28
+Jan 31 20:24:47	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.100
+Jan 31 20:29:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:29:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:29:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:29:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:29:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:34:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:34:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:34:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:34:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:34:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:39:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:39:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:39:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:39:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:39:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:41:20	 DHCP      	INFO   	DHCPS:Recv REQUEST from 2E:E3:33:CB:07:DC
+Jan 31 20:41:20	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.101
+Jan 31 20:44:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:44:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:44:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:44:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:44:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:45:05	 DHCP      	INFO   	DHCPS:Recv REQUEST from 54:0D:F9:CE:5D:5F
+Jan 31 20:45:05	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.103
+Jan 31 20:49:43	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:49:44	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:49:44	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:49:44	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:49:44	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:54:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:54:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:54:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:54:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:54:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 20:59:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 20:59:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 20:59:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 20:59:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 20:59:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 21:04:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 21:04:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 21:04:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 21:04:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 21:04:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 21:06:21	 DHCP      	INFO   	DHCPS:Recv REQUEST from 04:D9:F5:7D:74:CA
+Jan 31 21:06:21	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.104
+Jan 31 21:06:32	 DHCP      	INFO   	DHCPS:Recv REQUEST from 7C:6D:A6:07:A5:2A
+Jan 31 21:06:32	 DHCP      	INFO   	DHCPS:Send ACK to 172.16.0.102
+Jan 31 21:09:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 21:09:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 21:09:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 21:09:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 21:09:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 21:14:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 21:14:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 21:14:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 21:14:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 21:14:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully
+Jan 31 21:19:44	 DHCP      	INFO   	DHCPC Send REQUEST to server 647e0001 with request ip 647e0d47
+Jan 31 21:19:45	 DHCP      	INFO   	DHCPC Recv ACK from server 647e0001 with ip 647e0d47 lease time 600
+Jan 31 21:19:45	 DHCP      	INFO   	DHCPC:GET ip:647e0d47 mask:ffff0000 gateway:647e0001 dns1:c2e29075 dns2:c33a017a static route:0
+Jan 31 21:19:45	 DHCP      	INFO   	dhcpc_ipc_data_rcv_router 693 : current network type = 0  
+Jan 31 21:19:45	 DHCP      	NOTICE 	Dynamic IP(DHCP Client) obtained an IP successfully

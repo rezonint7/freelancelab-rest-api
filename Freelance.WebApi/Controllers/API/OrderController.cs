@@ -7,13 +7,13 @@ using Freelance.Application.Orders.Commands.CreateOrder;
 using Freelance.Application.Orders.Commands.UpdateOrder;
 using Freelance.Application.Orders.Commands.DeleteOrder;
 using Microsoft.AspNetCore.Authorization;
-using Freelance.Application.ResponsesImplOrders.Commands.CreateResponseImplementer;
-using Freelance.Application.ResponsesImplOrders.Commands.DeleteResponseImplementer;
-using Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerToOrder;
-using Freelance.Application.ResponsesCustomerOrders.Commands.DeleteImplementerFromOrder;
 using MediatR;
-using Freelance.Application.ResponsesCustomerOrders.Commands.CompleteOrder;
 using Freelance.WebApi.Models.Orders;
+using Freelance.Application.Orders.Commands.SetImplementerToOrder;
+using Freelance.Application.Orders.Commands.DeleteImplementerFromOrder;
+using Freelance.Application.Orders.Commands.CompleteOrder;
+using Freelance.Application.Orders.Commands.DeleteResponseImplementer;
+using Freelance.Application.Orders.Commands.CreateResponseImplementer;
 
 namespace Freelance.WebApi.Controllers.API
 {
@@ -88,23 +88,24 @@ namespace Freelance.WebApi.Controllers.API
 
         [HttpPost("{id}/response")]
         [Authorize(Roles = "Implementer")]
-        public async Task<ActionResult<Guid>> CreateNewResponseOrder(Guid id)
+        public async Task<ActionResult<Guid>> CreateNewResponseOrder([FromBody] CreateResponseDto createResponseDto)
         {
             var command = new CreateNewResponseCommand
             {
-                OrderId = id,
+                OrderId = createResponseDto.OrderId,
+                ResponseMessage = createResponseDto.ResponseMessage,
                 ImplementerId = UserId
             };
             await Mediator.Send(command);
 
-            return Created($"Order: {id} - Implementer: {UserId}", true);
+            return Created($"Order: {createResponseDto.OrderId} - Implementer: {UserId}", true);
         }
 
         [HttpDelete("{id}/delete-response")]
         [Authorize(Roles = "Implementer")]
         public async Task<ActionResult<Unit>> DeleteResponseOrder(Guid id)
         {
-            var command = new DeleteResponseCommand { ResponseId = id };
+            var command = new DeleteResponseCommand { ResponseId = id, ImplementerId = UserId };
             await Mediator.Send(command);
 
             return NoContent();

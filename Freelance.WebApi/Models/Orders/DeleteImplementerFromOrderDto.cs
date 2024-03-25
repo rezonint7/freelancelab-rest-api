@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Freelance.Application.Common.Mapping;
-using Freelance.Application.ResponsesCustomerOrders.Commands.DeleteImplementerFromOrder;
+using Freelance.Application.Orders.Commands.DeleteImplementerFromOrder;
 
 namespace Freelance.WebApi.Models.Orders
 {

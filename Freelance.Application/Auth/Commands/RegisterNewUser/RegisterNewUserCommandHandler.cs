@@ -19,6 +19,9 @@ namespace Freelance.Application.Auth.Commands.RegisterNewUser {
         }
 
         public async Task<Guid> Handle(RegisterNewUserCommand request, CancellationToken cancellationToken) {
+            if (request.Role.ToUpper() == "ADMIN" || request.Role.ToUpper() == "MANAGER") {
+                throw new NotFoundException("Role", request.Role);
+            }
             return await _authenticationService.RegisterUserAsync(request, cancellationToken);
         }
     }

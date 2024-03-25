@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Freelance.Application.Common.Mapping;
+using Freelance.Application.Orders.Commands.SetImplementerToOrder;
 using Freelance.Application.Orders.Commands.UpdateOrder;
-using Freelance.Application.ResponsesCustomerOrders.Commands.SetImplementerToOrder;
 
 namespace Freelance.WebApi.Models.Orders
 {
