@@ -2,20 +2,8 @@
 using Freelance.Application.Common.Exceptions;
 using Freelance.Application.Interfaces;
 using Freelance.Domain;
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Freelance.Persistence.Services {
     public class AuthenticationService : IAuthenticationService {
@@ -25,7 +13,10 @@ namespace Freelance.Persistence.Services {
         private readonly UserService _userService;
         private readonly JwtService _jwtService;
 
-        public AuthenticationService(UserService userService, JwtService jwtService, FreelanceDBContext freelanceDBContext,
+        public AuthenticationService(
+            UserService userService, 
+            JwtService jwtService, 
+            FreelanceDBContext freelanceDBContext,
             SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager) {
             _freelanceDBContext = freelanceDBContext;
@@ -87,6 +78,10 @@ namespace Freelance.Persistence.Services {
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return newUser.Id;
         }
+
+        //public async Task<Guid> AuthorizationUserWithOAuth() {
+        //    var userInfo = await GetUserInfoFromOAuthProvider(accessToken);
+        //}
 
         public async Task<bool> Logout() {
             await _signInManager.SignOutAsync();
