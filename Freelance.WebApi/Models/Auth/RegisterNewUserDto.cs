@@ -15,6 +15,10 @@ namespace Freelance.WebApi.Models.Auth
         public string? MiddleName { get; set; }
         public string Email { get; set; }
 
+        public string? OAuthProvider { get; set; } = null;
+        public string? OAuthToken { get; set; } = null;
+        public string? OAuthKey { get; set; } = null;
+
         public void Mapping(Profile profile)
         {
             profile.CreateMap<RegisterNewUserDto, RegisterNewUserCommand>()
@@ -31,7 +35,13 @@ namespace Freelance.WebApi.Models.Auth
                 .ForMember(userCommand => userCommand.MiddleName,
                     opt => opt.MapFrom(userCommand => userCommand.MiddleName))
                 .ForMember(userCommand => userCommand.Email,
-                    opt => opt.MapFrom(userCommand => userCommand.Email));
+                    opt => opt.MapFrom(userCommand => userCommand.Email))
+                .ForMember(userCommand => userCommand.OAuthProvider,
+                    opt => opt.MapFrom(userCommand => userCommand.OAuthProvider))
+                .ForMember(userCommand => userCommand.OAuthToken,
+                    opt => opt.MapFrom(userCommand => userCommand.OAuthToken))
+                .ForMember(userCommand => userCommand.OAuthKey,
+                    opt => opt.MapFrom(userCommand => userCommand.OAuthKey));
         }
     }
 }

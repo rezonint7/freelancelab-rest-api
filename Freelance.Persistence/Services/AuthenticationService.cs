@@ -2,6 +2,7 @@
 using Freelance.Application.Common.Exceptions;
 using Freelance.Application.Interfaces;
 using Freelance.Domain;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,13 +76,16 @@ namespace Freelance.Persistence.Services {
                     IsTrusted = false,
                 });
             }
+
+            if (!string.IsNullOrEmpty(registerNewUserCommand.OAuthProvider) && !string.IsNullOrEmpty(registerNewUserCommand.OAuthToken)) {
+                var login = new UserLoginInfo(registerNewUserCommand.OAuthProvider, registerNewUserCommand.OAuthKey, registerNewUserCommand.Login);
+                await _userManager.AddLoginAsync(newUser, login);
+                await _userManager.SetAuthenticationTokenAsync(newUser, registerNewUserCommand.OAuthProvider, "access_token", registerNewUserCommand.OAuthToken);
+            }
+
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return newUser.Id;
         }
-
-        //public async Task<Guid> AuthorizationUserWithOAuth() {
-        //    var userInfo = await GetUserInfoFromOAuthProvider(accessToken);
-        //}
 
         public async Task<bool> Logout() {
             await _signInManager.SignOutAsync();
@@ -95,6 +99,10 @@ namespace Freelance.Persistence.Services {
             string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             return result.Succeeded;
+        }
+
+        public async Task<string> AuthorizationUserWithOAuth(string provider, string accesToken) {
+            throw new Exception("123");
         }
     }
 }

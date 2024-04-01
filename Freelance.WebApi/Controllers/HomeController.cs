@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Net.Http;
@@ -18,69 +19,37 @@ namespace Freelance.WebApi.Controllers {
         }
 
 
-        [HttpGet("github-oauth")]
-        public IActionResult GitHubOAuth() {
+        [HttpGet("oauth/{provider}")]
+        public IActionResult GitHubOAuth(string provider) {
             var properties = new AuthenticationProperties {
-                RedirectUri = Url.Action(nameof(HandleGitHubResponse), "Home", new { code_challenge = "" }, Request.Scheme)
+                RedirectUri = "/oauth-handler/" + provider
             };
-            return Challenge(properties, "GitHub");
+            return Challenge(properties, getProviderNormalized(provider));
         }
 
-        [HttpGet("github-oauth-handler")]
-        public async Task<IActionResult> HandleGitHubResponse() {
-            var properties = new AuthenticationProperties {
-                RedirectUri = Url.Action(nameof(HandleGitHubResponse), "Home", new { code_challenge = "" }, Request.Scheme)
-            };
-            var codeResult = Challenge(properties, "GitHub");
 
-            var code = Request.Query["code"].ToString();
-            var error = Request.Query["error"].ToString();
+        [HttpGet("oauth-handler/{provider}")]
+        public async Task<IActionResult> OAuth(string provider) {
 
-            if (!string.IsNullOrEmpty(error)) {
-                // Обработка ошибок, если таковые имеются
-                return RedirectToAction("Error");
+            var result = await HttpContext.AuthenticateAsync(getProviderNormalized(provider));
+            if (result.Succeeded) {
+                var tokens = result.Properties.GetTokens();
+                ViewData["access_token"] = tokens.FirstOrDefault(t => t.Name == "access_token")?.Value;
+                ViewData["provider"] = getProviderNormalized(provider);
+                return View();
             }
-
-            if (string.IsNullOrEmpty(code)) {
-                // Код не получен
-                return RedirectToAction("Error-Code");
+            else {
+                return NotFound("token");
             }
-
-            // Обменяем полученный код на токен доступа
-            var tokenResponse = await ExchangeCodeForAccessToken(code);
-            if (!tokenResponse.IsSuccessStatusCode) {
-                // Обработка ошибок при обмене кода на токен
-                return RedirectToAction("Error");
-            }
-
-            // Получаем токен из ответа
-            var responseContent = await tokenResponse.Content.ReadAsStringAsync();
-            var tokenResponseValues = QueryHelpers.ParseQuery(responseContent);
-            var accessToken = tokenResponseValues["access_token"];
-
-            // Далее можно сохранить токен и перенаправить пользователя на нужную страницу
-            // Например, RedirectToAction("UserProfile", "User", new { accessToken = accessToken });
-            // Или просто вернуть его клиенту
-
-            return Ok(new { access_token = accessToken });
         }
 
-        private async Task<HttpResponseMessage> ExchangeCodeForAccessToken(string code) {
-            var configuration = HttpContext.RequestServices.GetRequiredService<IConfiguration>();
-
-            using var httpClient = new HttpClient();
-
-            var tokenRequestParameters = new Dictionary<string, string>
-            {
-        { "client_id", configuration["OAuth:GitHub:ClientId"] },
-        { "client_secret", configuration["OAuth:GitHub:ClientSecret"] },
-        { "code", code }
-    };
-
-            var tokenRequestContent = new FormUrlEncodedContent(tokenRequestParameters);
-            var tokenResponse = await httpClient.PostAsync("https://github.com/login/oauth/access_token", tokenRequestContent);
-
-            return tokenResponse;
+        private string getProviderNormalized(string provider) { 
+            switch (provider) {
+                case "github": return "GitHub";
+                case "google": return "Google";
+                case "vkontakte": return "Vkontakte";
+                default: return "null";
+            }
         }
 
 

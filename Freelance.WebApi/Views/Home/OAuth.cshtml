@@ -1,0 +1,10 @@
+﻿@{
+    var accessToken = ViewData["access_token"];
+    var provider = ViewData["provider"];
+    ViewData["Title"] = "Redirect";
+}
+<script>
+    localStorage.clear();
+    localStorage.setItem('oauth_token', '{ "provider": @provider, "access_token": "@accessToken" }');
+    window.location.href = 'https://localhost:3000/register';
+</script>

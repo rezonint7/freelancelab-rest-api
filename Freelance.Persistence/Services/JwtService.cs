@@ -21,7 +21,7 @@ namespace Freelance.Persistence.Services {
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateJwtToken(ApplicationUser user, int expires = 14) {
+        public async Task<string> GenerateJwtToken(ApplicationUser user, int expires = 30) {
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim> {

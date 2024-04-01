@@ -15,5 +15,9 @@ namespace Freelance.Application.Auth.Commands.RegisterNewUser {
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
         public string Email { get; set; }
+
+        public string? OAuthProvider { get; set; } = null;
+        public string? OAuthToken { get; set; } = null;
+        public string? OAuthKey { get; set; } = null;
     }
 }

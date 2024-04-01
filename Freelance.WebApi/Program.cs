@@ -66,19 +66,13 @@ builder.Services.AddAuthentication(options => {
 }).AddOAuth("GitHub", options => {
     options.ClientId = builder.Configuration["OAuth:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["OAuth:GitHub:ClientSecret"];
-    options.CallbackPath = new PathString("/home");
-    options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
-    options.TokenEndpoint = "https://github.com/login/oauth/access_token";
-    options.UserInformationEndpoint = "https://api.github.com/user";
+    options.CallbackPath = new PathString(builder.Configuration["OAuth:GitHub:CallbackURL"]); 
+    options.AuthorizationEndpoint = builder.Configuration["OAuth:GitHub:AuthorizationEndpoint"];
+    options.TokenEndpoint = builder.Configuration["OAuth:GitHub:TokenEndpoint"];
+    options.UserInformationEndpoint = builder.Configuration["OAuth:GitHub:UserInfoEndpoint"];
     options.SaveTokens = true;
 
     options.Scope.Add("user");
-
-    options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-    options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-    options.ClaimActions.MapJsonKey("urn:github:login", "login");
-    options.ClaimActions.MapJsonKey("urn:github:url", "html_url");
-    options.ClaimActions.MapJsonKey("urn:github:avatar", "avatar_url");
     options.Events = new OAuthEvents {
         OnCreatingTicket = async context => {
             var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
