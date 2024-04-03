@@ -100,9 +100,5 @@ namespace Freelance.Persistence.Services {
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             return result.Succeeded;
         }
-
-        public async Task<string> AuthorizationUserWithOAuth(string provider, string accesToken) {
-            throw new Exception("123");
-        }
     }
 }

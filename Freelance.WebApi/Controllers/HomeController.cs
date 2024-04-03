@@ -53,7 +53,7 @@ namespace Freelance.WebApi.Controllers {
         }
 
 
-        [HttpGet("profile-git")]
+        [HttpGet("profile-git")] // пока не нашел применения данному методу
         public IActionResult GetUserProfile() {
             // Получение текущего пользователя из контекста HTTP
             var user = HttpContext.User;
