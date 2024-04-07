@@ -21,7 +21,7 @@ namespace Freelance.Persistence.Services {
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateJwtToken(ApplicationUser user, int expires = 30) {
+        public async Task<string> GenerateJwtToken(ApplicationUser user, int expires = 43200) {
             var roles = await _userManager.GetRolesAsync(user);
 
             var claims = new List<Claim> {
@@ -41,7 +41,33 @@ namespace Freelance.Persistence.Services {
                 issuer: _configuration.GetSection("Jwt:Issuer").Value,
                 audience: _configuration.GetSection("Jwt:Audience").Value,
                 claims: claims,
-                expires: DateTime.UtcNow.AddDays(expires),
+                expires: DateTime.UtcNow.AddMinutes(expires),
+                signingCredentials: credentials
+            ));
+        }
+
+        public async Task<string> GenerateJwtTokenOAuth(ApplicationUser user, int expires = 30) {
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = new List<Claim> {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim("UserName", user.UserName),
+                new Claim("FirstName", user.FirstName),
+                new Claim("LastName", user.LastName),
+                new Claim("Email", user.Email),
+                new Claim(JwtRegisteredClaimNames.Aud, _configuration.GetSection("Jwt:Audience").Value),
+                new Claim(JwtRegisteredClaimNames.Iss, _configuration.GetSection("Jwt:Issuer").Value)
+            };
+            claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role.Normalize())));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                _configuration.GetSection("Jwt:Key").Value));
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(
+                issuer: _configuration.GetSection("Jwt:Issuer").Value,
+                audience: _configuration.GetSection("Jwt:Audience").Value,
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(expires),
                 signingCredentials: credentials
             ));
         }

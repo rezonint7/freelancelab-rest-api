@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.Extensions.Options;
 
 string logsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "wwwroot", "logs");
 string logFilePath = Path.Combine(logsDirectory, "logs-.txt");
@@ -63,28 +64,31 @@ builder.Services.AddAuthentication(options => {
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true
     };
-}).AddOAuth("GitHub", options => {
+})
+.AddGitHub(options => {
     options.ClientId = builder.Configuration["OAuth:GitHub:ClientId"];
     options.ClientSecret = builder.Configuration["OAuth:GitHub:ClientSecret"];
-    options.CallbackPath = new PathString(builder.Configuration["OAuth:GitHub:CallbackURL"]); 
+    options.CallbackPath = new PathString(builder.Configuration["OAuth:GitHub:CallbackURL"]);
     options.AuthorizationEndpoint = builder.Configuration["OAuth:GitHub:AuthorizationEndpoint"];
     options.TokenEndpoint = builder.Configuration["OAuth:GitHub:TokenEndpoint"];
     options.UserInformationEndpoint = builder.Configuration["OAuth:GitHub:UserInfoEndpoint"];
     options.SaveTokens = true;
 
     options.Scope.Add("user");
-    options.Events = new OAuthEvents {
-        OnCreatingTicket = async context => {
-            var request = new HttpRequestMessage(HttpMethod.Get, context.Options.UserInformationEndpoint);
-            request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", context.AccessToken);
-            var response = await context.Backchannel.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, context.HttpContext.RequestAborted);
-            response.EnsureSuccessStatusCode();
-            var json = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-            context.RunClaimActions(json.RootElement);
-        }
-    };
+    options.Scope.Add("user:email");
+})
+.AddGoogle(options => {
+    options.ClientId = builder.Configuration["OAuth:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["OAuth:Google:ClientSecret"];
+    options.CallbackPath = new PathString(builder.Configuration["OAuth:Google:CallbackURL"]);
+    options.AuthorizationEndpoint = builder.Configuration["OAuth:Google:AuthorizationEndpoint"];
+    options.TokenEndpoint = builder.Configuration["OAuth:Google:TokenEndpoint"];
+    options.UserInformationEndpoint = builder.Configuration["OAuth:Google:UserInfoEndpoint"];
+    options.SaveTokens = true;
+
+    options.Scope.Add("https://www.googleapis.com/auth/userinfo.profile");
 });
+
 builder.Services.AddMvc();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();

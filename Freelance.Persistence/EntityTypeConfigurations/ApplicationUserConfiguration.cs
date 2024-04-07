@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace Freelance.Persistence.EntityTypeConfigurations {
     internal class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser> {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder) {
-            builder.Property(userInfo => userInfo.FirstName).IsRequired().HasMaxLength(200);
-            builder.Property(userInfo => userInfo.LastName).IsRequired().HasMaxLength(200);
+            builder.Property(userInfo => userInfo.FirstName).HasMaxLength(200);
+            builder.Property(userInfo => userInfo.LastName).HasMaxLength(200);
             builder.Property(userInfo => userInfo.MiddleName).HasMaxLength(200);
             builder.Property(userInfo => userInfo.Birthday);
             builder.Property(userInfo => userInfo.RegisterDate);

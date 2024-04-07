@@ -9,5 +9,7 @@ using System.Threading.Tasks;
 namespace Freelance.Application.Interfaces {
     public interface IJwtService {
         public Task<string> GenerateJwtToken(ApplicationUser user, int expires);
+        public Task<string> GenerateJwtTokenOAuth(ApplicationUser user, int expires);
+
     }
 }

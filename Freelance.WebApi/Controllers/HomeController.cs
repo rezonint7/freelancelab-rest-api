@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using AspNet.Security.OAuth.GitHub;
+using Freelance.Application.Auth.Commands.AuthenticateUserOAuth;
+using Freelance.Application.Interfaces;
+using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -8,6 +13,7 @@ using System.Security.Claims;
 namespace Freelance.WebApi.Controllers {
     [ApiExplorerSettings(IgnoreApi = true)]
     public class HomeController : Controller {
+
         [HttpGet("/")]
         public IActionResult Index() {
             return View();
@@ -19,38 +25,6 @@ namespace Freelance.WebApi.Controllers {
         }
 
 
-        [HttpGet("oauth/{provider}")]
-        public IActionResult GitHubOAuth(string provider) {
-            var properties = new AuthenticationProperties {
-                RedirectUri = "/oauth-handler/" + provider
-            };
-            return Challenge(properties, getProviderNormalized(provider));
-        }
-
-
-        [HttpGet("oauth-handler/{provider}")]
-        public async Task<IActionResult> OAuth(string provider) {
-
-            var result = await HttpContext.AuthenticateAsync(getProviderNormalized(provider));
-            if (result.Succeeded) {
-                var tokens = result.Properties.GetTokens();
-                ViewData["access_token"] = tokens.FirstOrDefault(t => t.Name == "access_token")?.Value;
-                ViewData["provider"] = getProviderNormalized(provider);
-                return View();
-            }
-            else {
-                return NotFound("token");
-            }
-        }
-
-        private string getProviderNormalized(string provider) { 
-            switch (provider) {
-                case "github": return "GitHub";
-                case "google": return "Google";
-                case "vkontakte": return "Vkontakte";
-                default: return "null";
-            }
-        }
 
 
         [HttpGet("profile-git")] // пока не нашел применения данному методу

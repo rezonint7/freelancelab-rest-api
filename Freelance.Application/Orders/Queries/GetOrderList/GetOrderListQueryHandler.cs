@@ -67,7 +67,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                 _freelanceDBContext.WorkExperience.Count() == 0 &&
                 _roleManager.Roles.Count() == 0) {
 
-                var roles = new string[] { "Customer", "Implementer", "Admin", "Owner", "Manager" };
+                var roles = new string[] { "Customer", "Implementer", "Admin", "Owner", "Manager", "OAuth" };
                 foreach (var role in roles) {
                     var roleExist = await _roleManager.RoleExistsAsync(role);
                     if (!roleExist) {

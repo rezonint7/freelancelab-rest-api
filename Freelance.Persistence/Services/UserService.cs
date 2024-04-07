@@ -1,4 +1,7 @@
-﻿using Freelance.Application.Interfaces;
+﻿using Freelance.Application.Auth.Commands.RegisterNewUser;
+using Freelance.Application.Auth.Commands.UpdateUserCredentialsOAuth;
+using Freelance.Application.Common.Exceptions;
+using Freelance.Application.Interfaces;
 using Freelance.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -24,11 +27,8 @@ namespace Freelance.Persistence.Services {
             _userManager = userManager;
         }
 
-        public Guid UserId { 
-            get {
-                var id = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-                return string.IsNullOrEmpty(id) ? Guid.Empty : Guid.Parse(id);
-            }
+        public string UserId {
+            get => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         }
 
         public string RemoteIpAddress {
@@ -43,6 +43,10 @@ namespace Freelance.Persistence.Services {
 
         public async Task<ApplicationUser?> GetUserByIdAsync(Guid userId, CancellationToken cancellationToken) {
             return await _freelanceDBContext.Users.FirstOrDefaultAsync(user => user.Id == userId, cancellationToken);
+        }
+
+        public async Task<ApplicationUser?> GetUserByExternalAsync(string loginProvider, string providerKey, CancellationToken cancellationToken) {
+            return await _userManager.FindByLoginAsync(loginProvider, providerKey);
         }
 
         public async Task<List<string>> GetUserRoleByIdAsync(Guid userId, CancellationToken cancellationToken) {
@@ -99,6 +103,56 @@ namespace Freelance.Persistence.Services {
 
         public async Task<List<ApplicationUser>> GetAdminsAsync(CancellationToken cancellationToken) {
             return await GetUsersAsync("ADMIN", cancellationToken);
+        }
+
+        public async Task<bool> ChangeUserRoleAsync(Guid userId, string roleNormalized, CancellationToken cancellationToken) {
+            var user = await GetUserByIdAsync(userId, cancellationToken);
+            var role = await _freelanceDBContext.Roles.FirstOrDefaultAsync(role => role.NormalizedName == roleNormalized, cancellationToken);
+            var userRole = (await GetUserRoleByIdAsync(userId, cancellationToken)).FirstOrDefault();
+
+            if (role == null) { throw new NotFoundException("Role", roleNormalized); }
+            if (user != null) {
+                await _userManager.RemoveFromRoleAsync(user, userRole);
+                await _userManager.AddToRoleAsync(user, role.Name);
+            }
+            return false;
+        }
+
+        public async Task<bool> ChangeUserCredentialsAsync(UpdateUserCredentialsOAuthCommand updateUserCredentials, CancellationToken cancellationToken) {
+            var user = await GetUserByIdAsync(updateUserCredentials.UserId, cancellationToken);
+            var role = await _freelanceDBContext.Roles.FirstOrDefaultAsync(role => role.NormalizedName == updateUserCredentials.Role, cancellationToken);
+            if (user == null) { throw new NotFoundException(nameof(ApplicationUser), updateUserCredentials.UserId); }
+
+            await _userManager.AddPasswordAsync(user, updateUserCredentials.Password);
+
+            user.Email = updateUserCredentials.Email;
+            user.UserName = updateUserCredentials.Login;
+            user.FirstName = updateUserCredentials.FirstName;
+            user.LastName = updateUserCredentials.LastName;
+            
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return false;
+
+            var workExperience = await _freelanceDBContext.WorkExperience.FirstAsync();
+            var category = await _freelanceDBContext.Categories.FirstAsync();
+            if (role.NormalizedName == "IMPLEMENTER") {
+                user.Implementers.Add(new Implementer {
+                    UserId = user.Id,
+                    Specialization = "",
+                    WorkExperience = workExperience,
+                    Skills = "",
+                    Category = category
+                });
+            }
+            else if (role.NormalizedName == "CUSTOMER") {
+                user.Customers.Add(new Customer {
+                    UserId = user.Id,
+                    IsTrusted = false,
+                });
+            }
+
+            await _freelanceDBContext.SaveChangesAsync(cancellationToken);
+            return true;
         }
     }
 }

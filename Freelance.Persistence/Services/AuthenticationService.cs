@@ -1,10 +1,12 @@
-﻿using Freelance.Application.Auth.Commands.RegisterNewUser;
+﻿using Freelance.Application.Auth.Commands.AuthenticateUserOAuth;
+using Freelance.Application.Auth.Commands.RegisterNewUser;
 using Freelance.Application.Common.Exceptions;
 using Freelance.Application.Interfaces;
 using Freelance.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Freelance.Persistence.Services {
     public class AuthenticationService : IAuthenticationService {
@@ -29,7 +31,6 @@ namespace Freelance.Persistence.Services {
 
         public async Task<string> Authenticate(string login, string password) {
             var result = await _signInManager.PasswordSignInAsync(login, password, false, lockoutOnFailure: false);
-
             if (!result.Succeeded) { throw new InvalidUserCredentialsException(); }
 
             var user = await _userManager.FindByNameAsync(login);
@@ -41,14 +42,13 @@ namespace Freelance.Persistence.Services {
             var role = await _freelanceDBContext.Roles.FirstOrDefaultAsync(role => role.NormalizedName == registerNewUserCommand.Role, cancellationToken);
             
             if (userExist != null) { throw new UserAlreadyExistsException(userExist.UserName); }
-            if (role == null) { throw new NotFoundException(nameof(Order), registerNewUserCommand.Role); }
+            if (role == null) { throw new NotFoundException("Role", registerNewUserCommand.Role); }
 
             var newUser = new ApplicationUser {
                 UserName = registerNewUserCommand.Login,
                 Email = registerNewUserCommand.Email,
                 FirstName = registerNewUserCommand.FirstName,
                 LastName = registerNewUserCommand.LastName,
-                MiddleName = registerNewUserCommand.MiddleName,
                 AvatarProfilePath = "",
                 HeaderProfilePath = "",
                 RegisterDate = DateTime.Now,
@@ -77,12 +77,6 @@ namespace Freelance.Persistence.Services {
                 });
             }
 
-            if (!string.IsNullOrEmpty(registerNewUserCommand.OAuthProvider) && !string.IsNullOrEmpty(registerNewUserCommand.OAuthToken)) {
-                var login = new UserLoginInfo(registerNewUserCommand.OAuthProvider, registerNewUserCommand.OAuthKey, registerNewUserCommand.Login);
-                await _userManager.AddLoginAsync(newUser, login);
-                await _userManager.SetAuthenticationTokenAsync(newUser, registerNewUserCommand.OAuthProvider, "access_token", registerNewUserCommand.OAuthToken);
-            }
-
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return newUser.Id;
         }
@@ -99,6 +93,48 @@ namespace Freelance.Persistence.Services {
             string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
             return result.Succeeded;
+        }
+
+        public async Task<string> AuthenticateOAuth(AuthenticateUserOAuthCommand authenticateUser, CancellationToken cancellationToken) {
+            var applicationUser = await _userService.GetUserByExternalAsync(authenticateUser.OAuthProvider, authenticateUser.OAuthKey, cancellationToken);
+            var role = await _freelanceDBContext.Roles.FirstOrDefaultAsync(role => role.NormalizedName == "OAUTH", cancellationToken);
+            if (role == null) { throw new NotFoundException("Role", "OAUTH"); }
+
+            if(applicationUser == null) {
+                var newUser = new ApplicationUser {
+                    UserName = authenticateUser.Login,
+                    Email = authenticateUser.Email,
+                    FirstName = authenticateUser.FirstName,
+                    LastName = authenticateUser.LastName,
+                    AvatarProfilePath = "",
+                    HeaderProfilePath = "",
+                    RegisterDate = DateTime.Now,
+                    About = ""
+                };
+                var result = await _userManager.CreateAsync(newUser);
+                await _userManager.AddToRoleAsync(newUser, role.Name);
+
+                if (!string.IsNullOrEmpty(authenticateUser.OAuthProvider) && !string.IsNullOrEmpty(authenticateUser.OAuthToken)) {
+                    var login = new UserLoginInfo(authenticateUser.OAuthProvider, authenticateUser.OAuthKey, authenticateUser.Login);
+                    await _userManager.AddLoginAsync(newUser, login);
+                    await _userManager.SetAuthenticationTokenAsync(newUser, authenticateUser.OAuthProvider, "access_token", authenticateUser.OAuthToken);
+                }
+                await _freelanceDBContext.SaveChangesAsync(cancellationToken);
+                applicationUser = await _userService.GetUserByLoginAsync(authenticateUser.Login, cancellationToken);
+
+                return await _jwtService.GenerateJwtTokenOAuth(applicationUser, 30);
+            }
+
+            //Генерируем токен если роль пользователя равна OAuth, назначается при регистрации,
+            //если пользователь продолжил регистрацию и сменил данные, то роль пользователя меняется на выбранную им и выдается токен по роли
+            if ((await _userService.GetUserRoleByIdAsync(applicationUser.Id, cancellationToken)).FirstOrDefault() == role.NormalizedName) {
+                return await _jwtService.GenerateJwtTokenOAuth(applicationUser, 30);
+            }
+
+            var resultSignIn = await _signInManager.ExternalLoginSignInAsync(authenticateUser.OAuthProvider, authenticateUser.OAuthKey, true);
+            if (!resultSignIn.Succeeded) { throw new Exception("Что-то пошло не так..."); } // исправить на другой Exception
+
+            return await _jwtService.GenerateJwtToken(applicationUser);
         }
     }
 }

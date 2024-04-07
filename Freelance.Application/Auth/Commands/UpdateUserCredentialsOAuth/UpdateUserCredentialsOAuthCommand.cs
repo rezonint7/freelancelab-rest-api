@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Freelance.Application.Auth.Commands.RegisterNewUser {
-    public class RegisterNewUserCommand: IRequest<Guid> {
+namespace Freelance.Application.Auth.Commands.UpdateUserCredentialsOAuth {
+    public class UpdateUserCredentialsOAuthCommand: IRequest<string> {
+        public Guid UserId { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
         public string Role { get; set; }

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Freelance.Application.Auth.Commands.RegisterNewUser;
+using Freelance.Application.Auth.Commands.UpdateUserCredentialsOAuth;
 using Freelance.Application.Auth.Queries.AuthenticateUser;
 using Freelance.Application.Interfaces;
 using Freelance.WebApi.Models.Auth;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Freelance.WebApi.Controllers.API
@@ -11,8 +13,7 @@ namespace Freelance.WebApi.Controllers.API
     public class AuthController : BaseController
     {
         private readonly IMapper _mapper;
-        private readonly IJwtService _jwtService;
-        public AuthController(IMapper mapper, IJwtService jwtService) => (_mapper, _jwtService) = (mapper, jwtService);
+        public AuthController(IMapper mapper) => (_mapper) = (mapper);
 
         [HttpPost("login")]
         public async Task<ActionResult<string>> LoginUser([FromBody] LoginUserDto loginUser)
@@ -37,6 +38,15 @@ namespace Freelance.WebApi.Controllers.API
             return Created($"{userId}", userId);
         }
 
+        [HttpPut("confirm")]
+        [Authorize(Roles = "OAuth")]
+        public async Task<ActionResult<string>> OAuthConfirm([FromBody] ConfirmRegisterDto confirmRegisterDto) {
+            var command = _mapper.Map<UpdateUserCredentialsOAuthCommand>(confirmRegisterDto);
+            command.UserId = UserId;
+            var token = await Mediator.Send(command);
+
+            return Ok(token);
+        }
 
     }
 }

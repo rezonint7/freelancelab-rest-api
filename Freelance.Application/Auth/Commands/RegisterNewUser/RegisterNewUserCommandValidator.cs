@@ -20,9 +20,6 @@ namespace Freelance.Application.Auth.Commands.RegisterNewUser {
                 .WithName("Фамилия")
                 .Matches("^[a-zA-Zа-яА-Я]*$")
                 .MaximumLength(200);
-            RuleFor(newUser => newUser.MiddleName).MaximumLength(200)
-                .WithName("Отчество")
-                .Matches("^[a-zA-Zа-яА-Я]*$");
             RuleFor(newUser => newUser.Email).NotEmpty().MaximumLength(200).EmailAddress()
                 .WithName("Email адрес");
         }

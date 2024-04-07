@@ -16,11 +16,6 @@ namespace Freelance.Application.Common.Behaviors {
         public LoggingBehavior(IUserService userService){
             _userService = userService;
         }
-        private string GetSHA256(string password, string salt) {
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password + salt);
-            byte[] hashBytes = SHA256.HashData(passwordBytes);
-            return Convert.ToBase64String(hashBytes);
-        }
 
         public async Task<TResponse> Handle(TReqest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken) {
             var requestName = typeof(TReqest).Name;
