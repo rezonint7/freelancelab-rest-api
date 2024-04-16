@@ -36,18 +36,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplication();
 builder.Services.AddControllers();
 builder.Services.AddPersistence(builder.Configuration);
+
+builder.Services.AddCors(options => {
+    options.AddPolicy("dev", policy => {
+        policy.AllowAnyOrigin();
+        policy.AllowAnyMethod();
+        policy.AllowAnyHeader();
+        policy.AllowCredentials();
+    });
+});
+
 builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(config => {
     config.AddProfile(new AssemblyMappingProfile(typeof(Program).Assembly));
     config.AddProfile(new AssemblyMappingProfile(typeof(IFreelanceDBContext).Assembly));
-});
-builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", policy => {
-        policy.WithOrigins("http://127.0.0.1:5500")
-            .AllowCredentials()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
-    });
 });
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options => {
@@ -135,14 +137,16 @@ app.UseCustomExceptionHandler();
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-app.UseCors("AllowAll");
+app.UseCors("dev");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapHub<ChatHub>("/chathub").RequireCors("AllowAll");
+
+
+app.MapHub<ChatHub>("/chathub").RequireCors("dev");
 
 app.MapControllerRoute(
     name: "default",

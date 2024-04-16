@@ -28,10 +28,8 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails {
                 .ThenInclude(impl => impl.WorkExperience)
                 .Include(i => i.Category)
                 .FirstOrDefaultAsync(order => order.OrderId == request.OrderId, cancellationToken);
-
-            if(order == null) {
-                throw new NotFoundException(nameof(Order), request.OrderId);
-            }
+            if (order == null) { throw new NotFoundException(nameof(Order), request.OrderId); }
+            if (request.UserId != order.CustomerId) { order.Responses = null; }
 
             return _mapper.Map<OrderDetailsViewModel>(order);
         }

@@ -18,12 +18,11 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
         public string Status { get; set; }
         public bool IsUrgent { get; set; }
         public Currency? Currency { get; set; }
-        public Guid? ImplementerId { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<Order, OrderLookupDto>()
-                .ForMember(order => order.OrderId, 
+                .ForMember(order => order.OrderId,
                     opt => opt.MapFrom(order => order.OrderId))
                 .ForMember(order => order.Title,
                     opt => opt.MapFrom(order => order.Title))
@@ -40,9 +39,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                 .ForMember(order => order.Customer,
                     opt => opt.MapFrom(order => order.Customer))
                 .ForMember(order => order.CreatedAt,
-                    opt => opt.MapFrom(order => order.CreatedAt))
-                .ForMember(order => order.ImplementerId,
-                    opt => opt.MapFrom(order => order.ImplementerId));
+                    opt => opt.MapFrom(order => order.CreatedAt));
         }
     }
 }

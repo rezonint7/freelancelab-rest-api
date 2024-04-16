@@ -21,7 +21,7 @@ namespace Freelance.WebApi.Controllers.API
         public ProfileController(IMapper mapper) => _mapper = mapper;
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<object>> GetProfileInfo(Guid id) {
+        public async Task<ActionResult<object>> GetProfileInfo(string id) {
             var query = new GetProfileInfoQuery { UserId = id };
             var viewModel = await Mediator.Send(query);
             return Ok(viewModel);

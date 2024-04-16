@@ -56,7 +56,7 @@ namespace Freelance.WebApi.Controllers
                 var providerNormalized = getProviderNormalized(provider);
 
                 switch (getProviderNormalized(provider)) {
-                    case "Github": {
+                    case "GitHub": {
                             var command = new AuthenticateUserOAuthCommand {
                                 Login = User.FindFirstValue(ClaimTypes.Name)!,
                                 Email = User.FindFirstValue(ClaimTypes.Email)!,
@@ -82,9 +82,10 @@ namespace Freelance.WebApi.Controllers
                             token = await Mediator.Send(command);
                         } break;
                 }
-                
 
-                ViewData["access_token"] = token;
+
+                Response.Cookies.Append("oauth_token", token);
+                ViewData["token"] = token;
                 return View();
             }
             else {

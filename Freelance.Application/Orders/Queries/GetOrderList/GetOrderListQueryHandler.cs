@@ -55,6 +55,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
             int totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
 
             ordersQuery = ordersQuery
+                .OrderByDescending(order => order.CreatedAt)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize);
 
@@ -82,7 +83,8 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                    new Domain.Status { Id = "archived", Name = "В архиве" },
                    new Domain.Status { Id = "completed", Name = "Завершен" },
                    new Domain.Status { Id = "open", Name = "Открыт" },
-                   new Domain.Status { Id = "canceled", Name = "Отменен" }
+                   new Domain.Status { Id = "canceled", Name = "Отменен" },
+                   new Domain.Status { Id = "in_progress", Name = "В работе" }
                );
                 await _freelanceDBContext.Categories.AddRangeAsync(
                     new Domain.Category { Name = "Разработка" },

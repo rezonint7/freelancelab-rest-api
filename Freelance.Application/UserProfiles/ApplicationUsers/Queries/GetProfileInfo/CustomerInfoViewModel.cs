@@ -21,6 +21,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public string AvatarProfilePath { get; set; }
         public string HeaderProfilePath { get; set; }
         public string About { get; set; }
+        public double Rating { get; set; }
 
         public IList<OrderLookupDto> Orders { get; set; }
         public IList<FeedbackUserLookupDto> Feedbacks { get; set; }
@@ -48,6 +49,8 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     opt => opt.MapFrom(customer => customer.User.HeaderProfilePath))
                 .ForMember(customerViewModel => customerViewModel.About,
                     opt => opt.MapFrom(customer => customer.User.About))
+                .ForMember(customerViewModel => customerViewModel.Rating,
+                    opt => opt.MapFrom(customer => customer.User.Rating))
                 .ForMember(customerViewModel => customerViewModel.Orders,
                     opt => opt.MapFrom(customer => customer.Orders))
                 .ForMember(customerViewModel => customerViewModel.Feedbacks,

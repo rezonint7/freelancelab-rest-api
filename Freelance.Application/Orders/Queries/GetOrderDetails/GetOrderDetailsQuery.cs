@@ -10,5 +10,6 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails
     public class GetOrderDetailsQuery : IRequest<OrderDetailsViewModel>
     {
         public Guid OrderId { get; set; }
+        public Guid UserId { get; set; }
     }
 }

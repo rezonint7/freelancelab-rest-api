@@ -34,7 +34,7 @@
         
 
         var settings = {
-            "url": commonURL + "order?search=" + search + "&categoryId=" + category,
+            "url": commonURL + "orders?search=" + search + "&categories=" + category + "&additionalCategories=null",
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -62,11 +62,7 @@
                         </div>
                     </div>
                 `;
-                if (!order.isCompleted) {
-                    if (order.implementerId === "00000000-0000-0000-0000-000000000000") {
-                        $('#orders-container').append(card);
-                    }
-                }
+                $('#orders-container').append(card);
             });
         });
     }

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 
 namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo {
     public class GetProfileInfoQuery : IRequest<object> {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
     }
 }
