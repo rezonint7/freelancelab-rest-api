@@ -40,7 +40,7 @@ namespace Freelance.Persistence.Services {
         public async Task<Guid> RegisterUserAsync(RegisterNewUserCommand registerNewUserCommand, CancellationToken cancellationToken) {
             var userExist = await _userService.GetUserByLoginAsync(registerNewUserCommand.Login, cancellationToken);
             var role = await _freelanceDBContext.Roles.FirstOrDefaultAsync(role => role.NormalizedName == registerNewUserCommand.Role, cancellationToken);
-            
+
             if (userExist != null) { throw new UserAlreadyExistsException(userExist.UserName); }
             if (role == null) { throw new NotFoundException("Role", registerNewUserCommand.Role); }
 
@@ -54,6 +54,7 @@ namespace Freelance.Persistence.Services {
                 RegisterDate = DateTime.Now,
                 About = ""
             };
+
             var result = await _userManager.CreateAsync(newUser, registerNewUserCommand.Password);
             if (!result.Succeeded) { throw new UserAlreadyExistsException(newUser.Email); } // исправить
 

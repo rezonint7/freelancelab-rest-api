@@ -9,6 +9,8 @@ namespace Freelance.WebApi.Models.Orders
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal ProjectFee { get; set; }
+        public string? Tags { get; set; }
+        public bool IsUrgent { get; set; }
         public int CurrencyId { get; set; }
         public int CategoryId { get; set; }
 
@@ -24,7 +26,11 @@ namespace Freelance.WebApi.Models.Orders
                 .ForMember(orderCommand => orderCommand.CurrencyId,
                     opt => opt.MapFrom(orderDto => orderDto.CurrencyId))
                 .ForMember(orderCommand => orderCommand.CategoryId,
-                    opt => opt.MapFrom(orderDto => orderDto.CategoryId));
+                    opt => opt.MapFrom(orderDto => orderDto.CategoryId))
+                .ForMember(orderCommand => orderCommand.Tags,
+                    opt => opt.MapFrom(orderDto => orderDto.Tags))
+                .ForMember(orderCommand => orderCommand.IsUrgent,
+                    opt => opt.MapFrom(orderDto => orderDto.IsUrgent));
         }
     }
 }

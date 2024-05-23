@@ -15,9 +15,9 @@
 
     var accessToken = "@token";
     if (parseJwt(accessToken)['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'OAuth') {
-        window.location.href = 'https://localhost:3000/register/complete';
+        window.location.href = 'http://localhost:3000/register/complete';
     }
     else {
-        window.location.href = 'https://localhost:3000/';
+        window.location.href = 'http://localhost:3000/';
     }
 </script>
