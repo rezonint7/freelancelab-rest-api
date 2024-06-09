@@ -26,6 +26,10 @@ namespace Freelance.WebApi.Middleware {
                     code = HttpStatusCode.BadRequest;
                     result = JsonSerializer.Serialize(validationException.Errors);
                     break;
+                case ItemAlreadyExistsException itemAlreadyExistsException:
+                    code= HttpStatusCode.BadRequest;
+                    result = itemAlreadyExistsException.Message;
+                    break;
                 case NotFoundException notFoundException:
                     code = HttpStatusCode.NotFound;
                     result = notFoundException.Message;

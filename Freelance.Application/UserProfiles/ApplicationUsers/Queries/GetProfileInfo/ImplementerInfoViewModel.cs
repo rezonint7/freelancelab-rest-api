@@ -15,7 +15,8 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
-        public DateTime? Birthday { get; set; }
+		public string? Role { get; set; }
+		public DateTime? Birthday { get; set; }
         public DateTime? RegisterDate { get; set; }
         public string AvatarProfilePath { get; set; }
         public string HeaderProfilePath { get; set; }
@@ -44,7 +45,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     opt => opt.MapFrom(implementer => implementer.User.LastName))
                 .ForMember(implementerViewModel => implementerViewModel.MiddleName,
                     opt => opt.MapFrom(implementer => implementer.User.MiddleName))
-                .ForMember(implementerViewModel => implementerViewModel.Birthday,
+				.ForMember(implementerViewModel => implementerViewModel.Birthday,
                     opt => opt.MapFrom(implementer => implementer.User.Birthday))
                 .ForMember(implementerViewModel => implementerViewModel.RegisterDate,
                     opt => opt.MapFrom(implementer => implementer.User.RegisterDate))

@@ -29,9 +29,20 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails {
                 .Include(i => i.Category)
                 .FirstOrDefaultAsync(order => order.OrderId == request.OrderId, cancellationToken);
             if (order == null) { throw new NotFoundException(nameof(Order), request.OrderId); }
-            if (request.UserId != order.CustomerId) { order.Responses = null; }
+            
+            if (request.UserId != order.CustomerId) {
+				var userResponse = order.Responses.FirstOrDefault(r => r.ImplementerId == request.UserId);
+				if (userResponse != null) {
+                    order.Responses.Clear();
+					order.Responses.Add(userResponse);
+				}
+				else {
+					order.Responses.Clear();
+				}
+			}
 
             return _mapper.Map<OrderDetailsViewModel>(order);
         }
-    }
+
+	}
 }

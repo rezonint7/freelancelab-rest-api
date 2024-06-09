@@ -35,8 +35,11 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     .Include(i => i.User.Feedbacks)
                     .FirstOrDefaultAsync(customer => customer.UserId == user.Id, cancellationToken);
                 if(customer == null) { throw new NotFoundException(nameof(Customer), request.UserId); }
-                return _mapper.Map<CustomerInfoViewModel>(customer);
-            }
+                var customerReturn = _mapper.Map<CustomerInfoViewModel>(customer);
+                customerReturn.Role = userRole[0];
+                return customerReturn;
+
+			}
             else if(userRole.Contains("IMPLEMENTER")) {
                 var impl = await _freelanceDBContext.Implementers
                     .Include(i => i.Orders)
@@ -44,8 +47,11 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     .Include(i => i.User.Feedbacks)
                     .FirstOrDefaultAsync(impl => impl.UserId == user.Id, cancellationToken);
                 if (impl == null) { throw new NotFoundException(nameof(Implementer), request.UserId); }
-                return _mapper.Map<ImplementerInfoViewModel>(impl);
-            }
+				var implReturn = _mapper.Map<ImplementerInfoViewModel>(impl);
+				implReturn.Role = userRole[0];
+                return implReturn;
+
+			}
             else { throw new NotFoundException(nameof(ApplicationUser), request.UserId); }
             
         }

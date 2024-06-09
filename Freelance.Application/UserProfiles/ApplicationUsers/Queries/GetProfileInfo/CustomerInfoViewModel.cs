@@ -16,6 +16,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
+        public string? Role { get; set; }
         public DateTime? Birthday { get; set; }
         public DateTime? RegisterDate { get; set; }
         public string AvatarProfilePath { get; set; }

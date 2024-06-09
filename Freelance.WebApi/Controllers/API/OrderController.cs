@@ -42,7 +42,7 @@ namespace Freelance.WebApi.Controllers.API
         [HttpGet("details/{id}")]
         public async Task<ActionResult<OrderDetailsViewModel>> GetDetailsOrder(Guid id)
         {
-            var query = new GetOrderDetailsQuery{ OrderId = id };
+            var query = new GetOrderDetailsQuery{ OrderId = id, UserId = UserId };
             var viewModel = await Mediator.Send(query);
 
             return Ok(viewModel);
@@ -88,17 +88,17 @@ namespace Freelance.WebApi.Controllers.API
 
         [HttpPost("{id}/response")]
         [Authorize(Roles = "Implementer")]
-        public async Task<ActionResult<Guid>> CreateNewResponseOrder([FromBody] CreateResponseDto createResponseDto)
+        public async Task<ActionResult<Guid>> CreateNewResponseOrder(Guid id, [FromBody] CreateResponseDto createResponseDto)
         {
             var command = new CreateNewResponseCommand
             {
-                OrderId = createResponseDto.OrderId,
-                ResponseMessage = createResponseDto.ResponseMessage,
+                OrderId = id,
+				ResponseMessage = createResponseDto.ResponseMessage,
                 ImplementerId = UserId
             };
             await Mediator.Send(command);
 
-            return Created($"Order: {createResponseDto.OrderId} - Implementer: {UserId}", true);
+            return Created($"Order: {id} - Implementer: {UserId}", true);
         }
 
         [HttpDelete("{id}/delete-response")]

@@ -15,7 +15,8 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string? MiddleName { get; set; }
-        public string? WorkExperience { get; set; }
+		public string AvatarPath { get; set; }
+		public string? WorkExperience { get; set; }
         public string? Skills { get; set; }
 
         public string? Specialization { get; set; }
@@ -35,7 +36,9 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails {
                     opt => opt.MapFrom(impl => impl.Implementer.User.FirstName))
                 .ForMember(impl => impl.MiddleName,
                     opt => opt.MapFrom(impl => impl.Implementer.User.MiddleName))
-                .ForMember(impl => impl.Specialization,
+				.ForMember(impl => impl.AvatarPath,
+					opt => opt.MapFrom(impl => impl.Implementer.User.AvatarProfilePath))
+				.ForMember(impl => impl.Specialization,
                     opt => opt.MapFrom(impl => impl.Implementer.Specialization))
                 .ForMember(impl => impl.ResponseMessage,
                     opt => opt.MapFrom(impl => impl.ResponseMessage))
