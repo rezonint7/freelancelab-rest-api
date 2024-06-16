@@ -21,10 +21,6 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetImpleme
 
         public string AvatarProfilePath { get; set; }
 
-        public string About { get; set; }
-
-        public IList<PortfolioImplementerLookupDto> Portfolio { get; set; }
-
         public void Mapping(Profile profile) {
             profile.CreateMap<Implementer, ImplementerLookupDto>()
                 .ForMember(implementerLookupDto => implementerLookupDto.UserId,
@@ -41,14 +37,11 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetImpleme
                     opt => opt.MapFrom(implementer => implementer.User.AvatarProfilePath))
                 .ForMember(implementerLookupDto => implementerLookupDto.Rating,
                     opt => opt.MapFrom(implementer => implementer.User.Rating))
-                .ForMember(implementerLookupDto => implementerLookupDto.About,
-                    opt => opt.MapFrom(implementer => implementer.User.About))
+
                 .ForMember(implementerLookupDto => implementerLookupDto.Specialization,
                     opt => opt.MapFrom(implementer => implementer.Specialization))
                 .ForMember(implementerLookupDto => implementerLookupDto.Skills,
-                    opt => opt.MapFrom(implementer => implementer.Skills))
-                .ForMember(implementerLookupDto => implementerLookupDto.Portfolio,
-                    opt => opt.MapFrom(implementer => implementer.Portfolio));
+                    opt => opt.MapFrom(implementer => implementer.Skills));
         }
     }
 }

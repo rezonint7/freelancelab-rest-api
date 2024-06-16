@@ -5,6 +5,7 @@ using Freelance.Application.PortfolioItemsImplementer.Commands.UpdatePortfolioIt
 using Freelance.Application.PortfolioItemsImplementer.Queries.GetDetailsPortfolioItem;
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.DeleteUserProfile;
 using Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUserProfile;
+using Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetImplementerList;
 using Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfileInfo;
 using Freelance.WebApi.Models.Portfolio;
 using Freelance.WebApi.Models.Profiles;
@@ -27,7 +28,19 @@ namespace Freelance.WebApi.Controllers.API
             return Ok(viewModel);
         }
 
-        [HttpPut("edit")]
+		[HttpGet("specialists")]
+		public async Task<ActionResult<ImplementerListViewModel>> GetListSpecialist(string? search = "", string categories = "-1", int pageSize = 20, int page = 1) {
+            var query = new GetImplementerListQuery {
+                Search = search,
+                Categories = categories,
+                PageSize = pageSize,
+                Page = page
+            };
+			var viewModel = await Mediator.Send(query);
+			return Ok(viewModel);
+		}
+
+		[HttpPut("edit")]
         [Authorize(Roles = "IMPLEMENTER, CUSTOMER, MANAGER, ADMIN, OWNER")]
         public async Task<ActionResult<Unit>> UdpateProfileInfo([FromBody] UpdateProfileInfoDto updateProfileDto) {
             var command = _mapper.Map<UpdateUserProfileCommand>(updateProfileDto);

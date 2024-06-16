@@ -29,11 +29,12 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetImpleme
                     impl.Specialization.ToLower().Contains(request.Search.ToLower()) ||
                     impl.User.About.ToLower().Contains(request.Search.ToLower()));
             }
-            if (request.Category != -1) {
-                implQuery = implQuery.Where(impl => impl.CategoryId == request.Category);
-            }
+			if (!string.IsNullOrEmpty(request.Categories) && request.Categories != "-1") {
+				var categoriesSplit = request.Categories.Split(',').Select(int.Parse).ToList();
+				implQuery = implQuery.Where(order => categoriesSplit.Contains(order.CategoryId));
+			}
 
-            int totalItems = await implQuery.CountAsync(cancellationToken);
+			int totalItems = await implQuery.CountAsync(cancellationToken);
             int totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
 
             implQuery = implQuery

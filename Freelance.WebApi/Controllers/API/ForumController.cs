@@ -17,13 +17,18 @@ using Freelance.WebApi.Models.Forum;
 using Freelance.WebApi.Models.Orders;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Freelance.WebApi.Controllers.API
 {
     [Route("api/forum")]
     public class ForumController : BaseController {
         private readonly IMapper _mapper;
-        public ForumController(IMapper mapper) => _mapper = mapper;
+		private readonly ILogger<ForumController> _logger;
+		public ForumController(IMapper mapper, ILogger<ForumController> logger) {
+			_mapper = mapper;
+            _logger = logger;
+		}
 
         #region Questions
 
@@ -39,13 +44,12 @@ namespace Freelance.WebApi.Controllers.API
             return Ok(viewModel);
         }
 
-        //[HttpGet("question/details/{id}")]
-        //public async Task<ActionResult<QuestionDetailsViewModel>> GetDetailsQuestion(int id) {
-        //    var query = new GetQuestionDetailsQuery { QuestionId = id };
-
-        //    var viewModel = await Mediator.Send(query);
-        //    return Ok(viewModel);
-        //}
+        [HttpGet("questions/details/{id}")]
+        public async Task<ActionResult<QuestionDetailsViewModel>> GetDetailsQuestion(int id) {
+            var query = new GetQuestionDetailsQuery { QuestionId = id };
+            var viewModel = await Mediator.Send(query);
+            return Ok(viewModel);
+        }
 
         [HttpPost("question/create")]
         public async Task<ActionResult<int>> CreateNewQuestion([FromBody] CreateQuestionDto createQuestionDto) {

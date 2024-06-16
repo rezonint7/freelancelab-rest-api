@@ -9,12 +9,15 @@ using System.Threading.Tasks;
 
 namespace Freelance.Application.References.Queries.GetAllReferences {
     public class CurrencyReferenceDto: IMapWith<Currency> {
-        public string Name { get; set; }
+		public int Id { get; set; }
+		public string Name { get; set; }
         public string Code { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<Currency, CurrencyReferenceDto>()
-                 .ForMember(currency => currency.Name,
+				 .ForMember(currency => currency.Id,
+					opt => opt.MapFrom(currency => currency.Id))
+				 .ForMember(currency => currency.Name,
                     opt => opt.MapFrom(currency => currency.Name))
                  .ForMember(currency => currency.Code,
                     opt => opt.MapFrom(currency => currency.Code));

@@ -10,11 +10,14 @@ using System.Threading.Tasks;
 
 namespace Freelance.Application.References.Queries.GetAllReferences {
     public class CategoryReferenceDto: IMapWith<Category> {
-        public string Name { get; set; }
+		public int Id { get; set; }
+		public string Name { get; set; }
         public void Mapping(Profile profile) {
             profile.CreateMap<Category, CategoryReferenceDto>()
+                 .ForMember(category => category.Id,
+                    opt => opt.MapFrom(category => category.Id))
                  .ForMember(category => category.Name,
-                    opt => opt.MapFrom(category => category.Name));
-        }
+					opt => opt.MapFrom(category => category.Name));
+		}
     }
 }
