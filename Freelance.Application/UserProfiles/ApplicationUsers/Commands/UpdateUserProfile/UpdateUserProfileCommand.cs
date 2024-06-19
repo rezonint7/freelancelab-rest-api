@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUse
         public DateTime? Birthday { get; set; }
         public string? About { get; set; }
 
-        public string AvatarProfilePath { get; set; }
-        public string HeaderProfilePath { get; set; }
+        public IFormFile AvatarFile { get; set; }
+        public IFormFile HeaderFile { get; set; }
     }
 }

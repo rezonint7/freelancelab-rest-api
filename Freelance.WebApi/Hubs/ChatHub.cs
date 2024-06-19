@@ -35,7 +35,12 @@ namespace Freelance.WebApi.Hubs {
                 _freelanceDBContext.ChatMessages.Add(message);
                 await _freelanceDBContext.SaveChangesAsync();
 
-                await Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", message);
+                await Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", new {
+                    chatId = message.ChatId,
+                    content = message.Content,
+                    sender = user.UserName, // Assuming you have a UserName property
+                    time = message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                });
             }
         }
 
@@ -49,7 +54,9 @@ namespace Freelance.WebApi.Hubs {
                 await Clients.Group(message.ChatId.ToString()).SendAsync("MessageDeleted", messageId);
             }
         }
-
+        public async Task JoinChat(string chatId) {
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
+        }
         public override async Task OnConnectedAsync() {
             await base.OnConnectedAsync();
             var userId = Context.UserIdentifier;

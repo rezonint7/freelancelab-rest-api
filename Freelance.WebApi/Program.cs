@@ -41,9 +41,10 @@ builder.Host.UseSerilog();
 
 builder.Services.AddCors(options => {
     options.AddPolicy("dev", policy => {
-        policy.AllowAnyOrigin();
-        policy.AllowAnyMethod();
-        policy.AllowAnyHeader();
+        policy.WithOrigins("http://localhost:3000") // Replace with your frontend domain
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
     });
 });
 

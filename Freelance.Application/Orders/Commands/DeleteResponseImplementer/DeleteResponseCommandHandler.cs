@@ -22,7 +22,10 @@ namespace Freelance.Application.Orders.Commands.DeleteResponseImplementer
 
         public async Task<Unit> Handle(DeleteResponseCommand request, CancellationToken cancellationToken)
         {
-            var response = _freelanceDBContext.ResponsesImplementer.FirstOrDefault(response => response.Id == request.ResponseId);
+            var response = _freelanceDBContext.ResponsesImplementer
+                .Include(i => i.Implementer)
+                .Include(i => i.Order)
+                .FirstOrDefault(response => response.Id == request.ResponseId);
             if (response == null) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
             if (response.Implementer.UserId != request.ImplementerId) { throw new NotFoundException(nameof(ResponseImplementer), request.ResponseId); }
             response.Order.Responses.Remove(response);

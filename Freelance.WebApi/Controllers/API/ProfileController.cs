@@ -40,15 +40,16 @@ namespace Freelance.WebApi.Controllers.API
 			return Ok(viewModel);
 		}
 
-		[HttpPut("edit")]
-        [Authorize(Roles = "IMPLEMENTER, CUSTOMER, MANAGER, ADMIN, OWNER")]
-        public async Task<ActionResult<Unit>> UdpateProfileInfo([FromBody] UpdateProfileInfoDto updateProfileDto) {
+        [HttpPut("edit")]
+        [Authorize(Roles = "Implementer, Customer, Manager, Admin, Owner")]
+        public async Task<ActionResult<Unit>> UdpateProfileInfo([FromForm] UpdateProfileInfoDto updateProfileDto) {
             var command = _mapper.Map<UpdateUserProfileCommand>(updateProfileDto);
             if (!RoleUser.Contains("OWNER") && !RoleUser.Contains("ADMIN")) command.UserId = UserId;
 
             await Mediator.Send(command);
             return NoContent();
         }
+
 
         [HttpDelete("delete/{id}")]
         [Authorize(Roles = "Implementer, Admin, Owner")]

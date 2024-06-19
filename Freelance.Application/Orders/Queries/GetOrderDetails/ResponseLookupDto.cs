@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace Freelance.Application.Orders.Queries.GetOrderDetails {
     public class ResponseLookupDto: IMapWith<ResponseImplementer> {
         public Guid ImplementerId { get; set; }
+        public Guid ResponseId { get; set; }
         public string UserName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -28,6 +29,8 @@ namespace Freelance.Application.Orders.Queries.GetOrderDetails {
             profile.CreateMap<ResponseImplementer, ResponseLookupDto>()
                 .ForMember(impl => impl.ImplementerId,
                     opt => opt.MapFrom(impl => impl.Implementer.UserId))
+                .ForMember(impl => impl.ResponseId,
+                    opt => opt.MapFrom(impl => impl.Id))
                 .ForMember(impl => impl.UserName,
                     opt => opt.MapFrom(impl => impl.Implementer.User.UserName))
                 .ForMember(impl => impl.LastName,

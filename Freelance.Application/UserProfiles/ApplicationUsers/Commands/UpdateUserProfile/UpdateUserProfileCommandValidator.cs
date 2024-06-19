@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,10 +27,20 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUse
                 .WithName("Дата рождения");
             RuleFor(updateUserProfile => updateUserProfile.About)
                 .MaximumLength(1000).WithName("О себе");
-            RuleFor(updateUserProfile => updateUserProfile.AvatarProfilePath)
-                .MaximumLength(1000).WithName("Аватар профиля");
-            RuleFor(updateUserProfile => updateUserProfile.HeaderProfilePath)
-                .MaximumLength(1000).WithName("Шапка профиля");
+            RuleFor(updateUserProfile => updateUserProfile.AvatarFile)
+                .Must(file => IsSupportedFileType(file)).WithMessage("Недопустимый формат файла. Поддерживаемые форматы: jpg, jpeg, png.")
+                .Must(file => file.Length < 2 * 1024 * 1024).WithMessage("Размер файла не должен превышать 2 мб.")
+                .When(updateUserProfile => updateUserProfile.AvatarFile != null);
+            RuleFor(updateUserProfile => updateUserProfile.HeaderFile)
+                .Must(file => IsSupportedFileType(file)).WithMessage("Недопустимый формат файла. Поддерживаемые форматы: jpg, jpeg, png.")
+                .Must(file => file.Length < 2 * 1024 * 1024).WithMessage("Размер файла не должен превышать 2 мб.")
+                .When(updateUserProfile => updateUserProfile.HeaderFile != null);
+        }
+
+        private bool IsSupportedFileType(IFormFile file) {
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            return allowedExtensions.Contains(fileExtension);
         }
     }
 }
