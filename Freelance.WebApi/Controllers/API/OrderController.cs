@@ -148,5 +148,17 @@ namespace Freelance.WebApi.Controllers.API
 
             return NoContent();
         }
-    }
+
+		[HttpPost("feedback/create")]
+		public async Task<ActionResult<Unit>> CreateFeedback([FromBody] CreateFeedbackDto createFeedbackDto) {
+			var query = new CreateFeedbackCommand { 
+                UserId = UserId,
+                OrderId = createFeedbackDto.OrderId,
+                FeedbackRating = createFeedbackDto.FeedbackRating,
+                FeedbackMessage = createFeedbackDto.FeedbackMessage,
+            };
+			var viewModel = await Mediator.Send(query);
+			return Ok(viewModel);
+		}
+	}
 }

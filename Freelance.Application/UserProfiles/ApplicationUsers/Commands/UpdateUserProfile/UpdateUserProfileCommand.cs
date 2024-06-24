@@ -15,7 +15,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUse
         public DateTime? Birthday { get; set; }
         public string? About { get; set; }
 
-        public IFormFile AvatarFile { get; set; }
-        public IFormFile HeaderFile { get; set; }
+        public IFormFile? AvatarFile { get; set; }
+        public IFormFile? HeaderFile { get; set; }
     }
 }

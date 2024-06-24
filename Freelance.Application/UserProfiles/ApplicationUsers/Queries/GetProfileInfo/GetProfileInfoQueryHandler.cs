@@ -43,6 +43,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
             else if(userRole.Contains("IMPLEMENTER")) {
                 var impl = await _freelanceDBContext.Implementers
                     .Include(i => i.Orders)
+                    .ThenInclude(i => i.Currency)
                     .Include(i => i.Portfolio)
                     .Include(i => i.User.Feedbacks)
                     .FirstOrDefaultAsync(impl => impl.UserId == user.Id, cancellationToken);

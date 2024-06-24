@@ -25,6 +25,9 @@ namespace Freelance.Application.Orders.Commands.UpdateOrder {
             if (currency == null) { throw new NotFoundException(nameof(Currency), request.CurrencyId); }
             if (category == null) { throw new NotFoundException(nameof(Category), request.CategoryId); }
             if (order.CustomerId != request.CustomerId) { throw new NotFoundException(nameof(Order), request.OrderId); }
+            if(order.StatusId != "open") {
+				throw new NotFoundException(nameof(Order), request.OrderId);
+			}
     
             order.Title = request.Title;
             order.Description = request.Description;

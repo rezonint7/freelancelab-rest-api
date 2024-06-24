@@ -30,7 +30,7 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Commands.UpdateUse
             user.Birthday = request.Birthday;
             user.About = request.About;
 
-            var userDirectory = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", request.UserId.ToString());
+			var userDirectory = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", request.UserId.ToString());
             if (!Directory.Exists(userDirectory)) {
                 Directory.CreateDirectory(userDirectory);
             }

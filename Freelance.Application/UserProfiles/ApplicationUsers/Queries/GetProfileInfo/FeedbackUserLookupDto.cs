@@ -10,7 +10,8 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public string UserName { get; set; }
+        public string AvatarUrl { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<Feedback, FeedbackUserLookupDto>()
@@ -20,10 +21,12 @@ namespace Freelance.Application.UserProfiles.ApplicationUsers.Queries.GetProfile
                     opt => opt.MapFrom(feedback => feedback.FeedbackRating))
                 .ForMember(feedback => feedback.CreatedAt,
                     opt => opt.MapFrom(feedback => feedback.CreatedAt))
-                .ForMember(feedback => feedback.UpdatedAt,
+                .ForMember(feedback => feedback.UpdatedAt, 
                     opt => opt.MapFrom(feedback => feedback.UpdatedAt))
-                .ForMember(feedback => feedback.User,
-                    opt => opt.MapFrom(feedback => feedback.User));
+				.ForMember(feedback => feedback.UserName,
+					opt => opt.MapFrom(feedback => feedback.User.UserName))
+				.ForMember(feedback => feedback.AvatarUrl,
+					opt => opt.MapFrom(feedback => feedback.User.AvatarProfilePath));
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
         private readonly IMapper _mapper;
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
+
         public GetOrderListQueryHandler(IFreelanceDBContext freelanceDBContext, IMapper mapper, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
             _freelanceDBContext = freelanceDBContext;
@@ -28,7 +29,7 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
         }
 
         public async Task<OrderListViewModel> Handle(GetOrderListQuery request, CancellationToken cancellationToken) {
-            IQueryable<Order> ordersQuery = _freelanceDBContext.Orders;
+            IQueryable<Order> ordersQuery = _freelanceDBContext.Orders.Where(i=> i.StatusId == "open");
             if (!string.IsNullOrEmpty(request.Search)) {
                 ordersQuery = ordersQuery.Where(order => order.Title.ToLower().Contains(request.Search.ToLower()));
             }
@@ -108,19 +109,19 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                    new Domain.ReasonToReport { Name = "Другое" }
                 );
 
-                var newUser = new ApplicationUser {
-                    UserName = "rezonint",
-                    Email = "rezonint@mail.ru",
-                    FirstName = "Anton",
-                    LastName = "Kunavin",
-                    AvatarProfilePath = "",
-                    HeaderProfilePath = "",
-                    RegisterDate = DateTime.Now,
-                    About = ""
-                };
-                var result = await _userManager.CreateAsync(newUser, "Qwerty123123");
+                //var newUser = new ApplicationUser {
+                //    UserName = "rezonint",
+                //    Email = "rezonint@mail.ru",
+                //    FirstName = "Anton",
+                //    LastName = "Kunavin",
+                //    AvatarProfilePath = "",
+                //    HeaderProfilePath = "",
+                //    RegisterDate = DateTime.Now,
+                //    About = ""
+                //};
+                //var result = await _userManager.CreateAsync(newUser, "Qwerty123123");
+                //await _userManager.AddToRoleAsync(newUser, "Manager");
 
-                await _userManager.AddToRoleAsync(newUser, "Manager");
                 await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             }
 

@@ -13,8 +13,8 @@ namespace Freelance.WebApi.Models.Profiles
         public DateTime? Birthday { get; set; }
         public string? About { get; set; }
 
-        public IFormFile AvatarFile { get; set; }
-        public IFormFile HeaderFile { get; set; }
+        public IFormFile? AvatarFile { get; set; }
+        public IFormFile? HeaderFile { get; set; }
 
         public void Mapping(Profile profile) {
             profile.CreateMap<UpdateProfileInfoDto, UpdateUserProfileCommand>()

@@ -20,13 +20,15 @@ namespace Freelance.Application.Orders.Commands.CompleteOrder
         }
         public async Task<Unit> Handle(CompleteOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = await _freelanceDBContext.Orders.FirstOrDefaultAsync(order => order.OrderId == request.OrderId, cancellationToken);
+            var order = await _freelanceDBContext.Orders.Include(i => i.Implementer).FirstOrDefaultAsync(order => order.OrderId == request.OrderId, cancellationToken);
             if (order == null || order.CustomerId != request.CustomerId)
             {
                 throw new NotFoundException(nameof(Order), request.OrderId);
             }
-            var status = await _freelanceDBContext.Statuses.FirstOrDefaultAsync(status => status.Name == "completed");
+
+            var status = await _freelanceDBContext.Statuses.FirstOrDefaultAsync(status => status.Id == "completed", cancellationToken);
             order.Status = status;
+            order.Implementer.Orders.Add(order);
             await _freelanceDBContext.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

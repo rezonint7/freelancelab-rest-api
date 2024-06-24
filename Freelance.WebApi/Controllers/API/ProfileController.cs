@@ -73,16 +73,16 @@ namespace Freelance.WebApi.Controllers.API
             return Ok(viewModel);
         }
 
-        [HttpPost("portfolio/create")]
-        [Authorize(Roles = "Implementer")]
-        public async Task<ActionResult<Unit>> CreateNewPortfolioItem([FromBody] CreatePortfolioItemDto createPortfolioItem) {
-            var command = _mapper.Map<CreateNewPortfolioItemCommand>(createPortfolioItem);
-            command.ImplementerId = UserId;
-            await Mediator.Send(command);
-            return NoContent();
-        }
+		[HttpPost("portfolio/create")]
+		[Authorize(Roles = "Implementer")]
+		public async Task<ActionResult<Unit>> CreateNewPortfolioItem([FromForm] CreatePortfolioItemDto createPortfolioItem) {
+			var command = _mapper.Map<CreateNewPortfolioItemCommand>(createPortfolioItem);
+			command.ImplementerId = UserId;
+			await Mediator.Send(command);
+			return NoContent();
+		}
 
-        [HttpPut("portfolio/edit")]
+		[HttpPut("portfolio/edit")]
         [Authorize(Roles = "Implementer")]
         public async Task<ActionResult<Unit>> UpdatePortfolioItem([FromBody] UpdatePortfolioItemDto updatePortfolioItem) {
             var command = _mapper.Map<UpdatePortfolioItemCommand>(updatePortfolioItem);
@@ -101,5 +101,6 @@ namespace Freelance.WebApi.Controllers.API
             await Mediator.Send(command);
             return NoContent();
         }
-    }
+
+	}
 }

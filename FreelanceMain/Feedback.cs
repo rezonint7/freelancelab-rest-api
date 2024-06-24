@@ -12,7 +12,7 @@ namespace Freelance.Domain {
         public string FeedbackMessage { get; set; }
         public int FeedbackRating { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
         public virtual Order Order { get; set; }
         public virtual ApplicationUser User { get; set; }
