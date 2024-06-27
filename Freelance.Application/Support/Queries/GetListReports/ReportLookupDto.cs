@@ -20,7 +20,7 @@ namespace Freelance.Application.Support.Queries.GetListReports {
         public void Mapping(Profile profile) {
             profile.CreateMap<ReportToSupport, ReportLookupDto>()
                 .ForMember(report => report.Id,
-                    opt => opt.MapFrom(report => Id))
+                    opt => opt.MapFrom(report => report.Id))
                 .ForMember(report => report.ReportMessage,
                     opt => opt.MapFrom(report => report.ReportMessage))
                 .ForMember(report => report.CreatedAt,

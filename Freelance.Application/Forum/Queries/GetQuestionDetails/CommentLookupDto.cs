@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Freelance.Application.Forum.Queries.GetQuestionDetails {
     public class CommentLookupDto : IMapWith<CommentToQuestionForum> {
+        public int CommentId { get; set; }
         public string CommentMessage { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -18,6 +19,8 @@ namespace Freelance.Application.Forum.Queries.GetQuestionDetails {
 
         public void Mapping(Profile profile) {
             profile.CreateMap<CommentToQuestionForum, CommentLookupDto>()
+                .ForMember(comment => comment.CommentId,
+                    opt => opt.MapFrom(comment => comment.Id))
                 .ForMember(comment => comment.CommentMessage,
                     opt => opt.MapFrom(comment => comment.CommentMessage))
                 .ForMember(comment => comment.CreatedAt,

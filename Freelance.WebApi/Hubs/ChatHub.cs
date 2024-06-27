@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Freelance.WebApi.Hubs {
     [EnableCors("AllowAll")]
-    [Authorize(Roles = "Implementer, Customer, MANAGER, ADMIN, OWNER")]
+    [Authorize(Roles = "Implementer, Customer, Manager, Admin, Owner")]
     public class ChatHub : Hub {
         private readonly FreelanceDBContext _freelanceDBContext;
         private readonly IMapper _mapper;
@@ -21,7 +21,9 @@ namespace Freelance.WebApi.Hubs {
 
         public async Task SendMessage(string chatId, string messageContent) {
             var user = await _freelanceDBContext.Users.FirstOrDefaultAsync(user => user.Id == Guid.Parse(Context.UserIdentifier));
-            var chat = await _freelanceDBContext.Chats.FindAsync(Guid.Parse(chatId));
+            var chat = await _freelanceDBContext.Chats
+                .Include(c => c.Users)
+                .FirstOrDefaultAsync(c => c.Id == Guid.Parse(chatId));
 
             if (user != null && chat != null) {
                 var message = new ChatMessage {
@@ -35,14 +37,32 @@ namespace Freelance.WebApi.Hubs {
                 _freelanceDBContext.ChatMessages.Add(message);
                 await _freelanceDBContext.SaveChangesAsync();
 
-                await Clients.Group(chat.Id.ToString()).SendAsync("ReceiveMessage", new {
+                var senderMessage = new {
                     chatId = message.ChatId,
                     content = message.Content,
-                    sender = user.UserName, // Assuming you have a UserName property
-                    time = message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")
-                });
+                    sender = user.UserName,
+                    time = message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    isReceived = false
+                };
+
+                // Создаем сообщение для получателей
+                var receiverMessage = new {
+                    chatId = message.ChatId,
+                    content = message.Content,
+                    sender = user.UserName,
+                    time = message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    isReceived = true
+                };
+
+                await Clients.User(user.Id.ToString()).SendAsync("ReceiveMessage", senderMessage);
+
+                var receiverIds = chat.Users.Where(u => u.Id != user.Id).Select(u => u.Id.ToString()).ToList();
+                if (receiverIds.Any()) {
+                    await Clients.Users(receiverIds).SendAsync("ReceiveMessage", receiverMessage);
+                }
             }
         }
+
 
         public async Task DeleteMessage(string messageId) {
             var message = await _freelanceDBContext.ChatMessages.FindAsync(Guid.Parse(messageId));
@@ -54,9 +74,25 @@ namespace Freelance.WebApi.Hubs {
                 await Clients.Group(message.ChatId.ToString()).SendAsync("MessageDeleted", messageId);
             }
         }
-        public async Task JoinChat(string chatId) {
+        public async Task JoinChat(string chatId, string currentUserId) {
             await Groups.AddToGroupAsync(Context.ConnectionId, chatId);
+            var messages = await _freelanceDBContext.ChatMessages
+                .Include(i => i.User)
+                .Where(m => m.ChatId == Guid.Parse(chatId))
+                .OrderBy(m => m.CreatedAt)
+                .ToListAsync();
+
+            foreach (var message in messages) {
+                await Clients.Caller.SendAsync("ReceiveMessage", new {
+                    chatId = message.ChatId,
+                    content = message.Content,
+                    sender = message.User.UserName,
+                    time = message.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    isReceived = message.User.Id != Guid.Parse(currentUserId)
+                });
+            }
         }
+
         public override async Task OnConnectedAsync() {
             await base.OnConnectedAsync();
             var userId = Context.UserIdentifier;

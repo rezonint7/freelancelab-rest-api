@@ -29,8 +29,9 @@ namespace Freelance.Application.Orders.Commands.CreateOrder {
 			if (order == null) {
 				throw new NotFoundException(nameof(Order), request.OrderId.ToString());
 			}
-
-			var feedback = new Feedback {
+            var status = await _freelanceDBContext.Statuses.FirstOrDefaultAsync(status => status.Id == "archived", cancellationToken);
+            order.Status = status;
+            var feedback = new Feedback {
 				Order = order,
 				User = user,
 				FeedbackMessage = request.FeedbackMessage,

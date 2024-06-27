@@ -19,7 +19,7 @@ namespace Freelance.Application.Support.Commands.ConfirmReport {
         }
 
         public async Task<Unit> Handle(ConfirmReportCommand request, CancellationToken cancellationToken) {
-            var report = await _freelanceDBContext.ReportsToSupport.FirstOrDefaultAsync(i => i.Id == request.ReportId, cancellationToken);
+            var report = await _freelanceDBContext.ReportsToSupport.Include(i => i.User).FirstOrDefaultAsync(i => i.Id == request.ReportId, cancellationToken);
             if (report == null) {
                 throw new NotFoundException(nameof(ReportToSupport), request.ReportId.ToString());
             }

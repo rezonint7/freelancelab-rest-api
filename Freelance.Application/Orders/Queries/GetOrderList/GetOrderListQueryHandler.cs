@@ -93,9 +93,14 @@ namespace Freelance.Application.Orders.Queries.GetOrderList {
                 );
                 await _freelanceDBContext.Categories.AddRangeAsync(
                     new Domain.Category { Name = "Разработка" },
+                    new Domain.Category { Name = "Тестирование" },
+                    new Domain.Category { Name = "Администирование" },
                     new Domain.Category { Name = "Дизайн" },
-                    new Domain.Category { Name = "Маркетинг" }
+                    new Domain.Category { Name = "Контент" },
+                    new Domain.Category { Name = "Маркетинг" },
+                    new Domain.Category { Name = "Разное" }
                 );
+
                 await _freelanceDBContext.WorkExperience.AddRangeAsync(
                     new Domain.WorkExperience { Name = "нет опыта" },
                     new Domain.WorkExperience { Name = "менее года" },

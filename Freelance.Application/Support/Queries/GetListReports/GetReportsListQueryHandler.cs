@@ -23,7 +23,7 @@ namespace Freelance.Application.Support.Queries.GetListReports {
         }
 
         public async Task<ReportsListViewModel> Handle(GetListReportsQuery request, CancellationToken cancellationToken) {
-            IQueryable<ReportToSupport> reportsQuery = _freelanceDBContext.ReportsToSupport;
+            IQueryable<ReportToSupport> reportsQuery = _freelanceDBContext.ReportsToSupport.Where(i => i.StatusId == "open");
 
             int totalItems = await reportsQuery.CountAsync(cancellationToken);
             int totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
